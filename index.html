@@ -3,88 +3,330 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RebuildHome 2000 - Felújítás és Építés</title>
+<title>Rebuild Home 2000 - Teljes Körű Lakásfelújítás</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/dist/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-body {
-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-line-height: 1.6;
-margin: 0;
-color: #333;
+body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+h1, h2, h3 { font-family: 'Playfair Display', serif; }
+
+.hero-gradient {
+background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.85)), url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=80');
+background-size: cover;
+background-position: center;
 }
-header {
-background: #2c3e50;
-color: white;
-padding: 2rem;
-text-align: center;
+
+.glass-nav {
+background: rgba(15, 23, 42, 0.9);
+backdrop-filter: blur(10px);
+border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-nav {
-background: #34495e;
-padding: 1rem;
-text-align: center;
+
+.service-card {
+transition: all 0.3s ease;
+background: rgba(30, 41, 59, 0.5);
+border: 1px solid rgba(255, 255, 255, 0.05);
 }
-nav a {
-color: white;
-margin: 0 15px;
-text-decoration: none;
-font-weight: bold;
+
+.service-card:hover {
+transform: translateY(-10px);
+background: rgba(30, 41, 59, 0.8);
+border-color: #f97316;
 }
-.container {
-padding: 20px;
-max-width: 1000px;
-margin: auto;
-}
-.hero {
-background: #ecf0f1;
-padding: 50px;
-text-align: center;
-border-radius: 8px;
-margin-bottom: 20px;
-}
-footer {
-background: #2c3e50;
-color: white;
-text-align: center;
-padding: 1rem;
-position: fixed;
-bottom: 0;
+
+.before-after-container {
+position: relative;
 width: 100%;
+max-width: 900px;
+height: 500px;
+margin: 0 auto;
+overflow: hidden;
+border-radius: 1rem;
+box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.after-image {
+position: absolute;
+top: 0; left: 0; width: 100%; height: 100%;
+background-image: url('https://images.unsplash.com/photo-1616489953149-997839af969e?auto=format&fit=crop&w=1200&q=80');
+background-size: cover;
+background-position: center;
+}
+
+.before-image {
+position: absolute;
+top: 0; left: 0; width: 50%; height: 100%;
+background-image: url('https://images.unsplash.com/photo-1505798577917-a65157d3320a?auto=format&fit=crop&w=1200&q=80');
+background-size: cover;
+background-position: center;
+border-right: 4px solid #f97316;
+z-index: 10;
+}
+
+.slider-handle {
+position: absolute;
+top: 50%; left: 50%; transform: translate(-50%, -50%);
+z-index: 20; background: #f97316; color: white;
+width: 44px; height: 44px; border-radius: 50%;
+display: flex; align-items: center; justify-content: center;
+cursor: ew-resize;
+box-shadow: 0 0 15px rgba(249, 115, 22, 0.6);
+}
+
+.reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+.reveal.active { opacity: 1; transform: translateY(0); }
+
+.btn-primary {
+background-color: #f97316;
+transition: all 0.3s ease;
+}
+.btn-primary:hover {
+background-color: #ea580c;
+transform: scale(1.05);
+box-shadow: 0 10px 20px -5px rgba(234, 88, 12, 0.4);
 }
 </style>
 </head>
-<body>
+<body class="bg-[#0f172a] text-slate-200">
 
-<header>
-<h1>RebuildHome 2000</h1>
-<p>Minőségi otthonfelújítás az alapoktól a tetőig</p>
-</header>
-
-<nav>
-<a href="#">Főoldal</a>
-<a href="#">Szolgáltatások</a>
-<a href="#">Referenciák</a>
-<a href="#">Kapcsolat</a>
+<!-- 1. OLDAL/SZEKCIÓ: NAVIGÁCIÓ & HERO -->
+<nav class="fixed w-full z-50 px-6 py-4 glass-nav flex justify-between items-center">
+<div class="text-2xl font-bold tracking-tighter text-white">REBUILD<span class="text-orange-500">HOME</span></div>
+<div class="hidden lg:flex gap-8 text-xs uppercase tracking-[0.2em] font-bold text-gray-300">
+<a href="#főoldal" class="hover:text-orange-500 transition">Főoldal</a>
+<a href="#szolgáltatások" class="hover:text-orange-500 transition">Szolgáltatások</a>
+<a href="#referenciák" class="hover:text-orange-500 transition">Referenciák</a>
+<a href="#rólunk" class="hover:text-orange-500 transition">Rólunk</a>
+<a href="#kapcsolat" class="hover:text-orange-500 transition">Kapcsolat</a>
+</div>
+<a href="tel:+36704901735" class="btn-primary text-white px-5 py-2 rounded-full text-sm font-bold shadow-lg">
+<i class="fas fa-phone-alt mr-2"></i>+36 70 490 1735
+</a>
 </nav>
 
-<div class="container">
-<section class="hero">
-<h2>Üdvözöljük a RebuildHome weboldalán!</h2>
-<p>Szakértő csapatunk segít Önnek álmai otthonának megvalósításában.</p>
-</section>
+<header id="főoldal" class="h-screen flex items-center justify-center text-center px-6 hero-gradient">
+<div class="max-w-5xl">
+<span class="text-orange-500 font-bold uppercase tracking-[0.4em] mb-4 block text-sm">Prémium Minőség 2000 óta</span>
+<h1 class="text-5xl md:text-8xl mb-8 text-white leading-tight">Végezzenek a profik, <br><span class="text-orange-500 italic">pihenjen Ön.</span></h1>
+<p class="text-xl text-slate-300 mb-12 max-w-2xl mx-auto leading-relaxed font-light">
+A Rebuild Home 2000 leveszi a válláról a felújítás minden terhét. Tervezéstől a kulcsátadásig, tiszta és precíz munkavégzéssel.
+</p>
+<div class="flex flex-col sm:flex-row gap-4 justify-center">
+<a href="#kapcsolat" class="btn-primary text-white px-10 py-4 rounded-full font-bold text-lg">Díjmentes Ajánlatkérés</a>
+<a href="#referenciák" class="border border-white/20 text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-white/10 transition">Munkáink megtekintése</a>
+</div>
+</div>
+</header>
 
-<section>
-<h3>Szolgáltatásaink:</h3>
-<ul>
-<li>Teljes körű lakásfelújítás</li>
-<li>Kőműves munkák és festés</li>
-<li>Víz- és villanyszerelés</li>
-<li>Szigetelés és tetőfedés</li>
-</ul>
-</section>
+<!-- 2. OLDAL/SZEKCIÓ: SZOLGÁLTATÁSOK -->
+<section id="szolgáltatások" class="py-32 px-6 bg-[#0f172a]">
+<div class="max-w-7xl mx-auto">
+<div class="text-center mb-20">
+<h2 class="text-4xl md:text-6xl text-white mb-6">Miben segíthetünk?</h2>
+<div class="w-24 h-1 bg-orange-500 mx-auto"></div>
+<p class="mt-8 text-slate-400 max-w-2xl mx-auto">Teljes körű generálkivitelezés, ahol minden munkafázist profi szakemberek koordinálnak.</p>
 </div>
 
-<footer>
-<p>&copy; 2024 RebuildHome 2000 - Minden jog fenntartva.</p>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Kártya 1 -->
+<div class="service-card p-10 rounded-2xl">
+<i class="fas fa-paint-roller text-4xl text-orange-500 mb-6 block"></i>
+<h3 class="text-2xl text-white mb-4">Festés és Mázolás</h3>
+<p class="text-slate-400 text-sm leading-relaxed">Prémium falfestés, tapétázás és dekorációs technikák. Pormentes csiszolás és makulátlan végeredmény.</p>
+</div>
+<!-- Kártya 2 -->
+<div class="service-card p-10 rounded-2xl">
+<i class="fas fa-border-all text-4xl text-orange-500 mb-6 block"></i>
+<h3 class="text-2xl text-white mb-4">Hideg-Meleg Burkolás</h3>
+<p class="text-slate-400 text-sm leading-relaxed">Precíz járólapozás, csempézés és parkettázás. Nagyméretű lapok fektetése modern technológiával.</p>
+</div>
+<!-- Kártya 3 -->
+<div class="service-card p-10 rounded-2xl">
+<i class="fas fa-bolt text-4xl text-orange-500 mb-6 block"></i>
+<h3 class="text-2xl text-white mb-4">Villany- és Vízszerelés</h3>
+<p class="text-slate-400 text-sm leading-relaxed">Teljes hálózatfelújítás, szerelvényezés és korszerűsítés. Biztonságos és szabványos kivitelezés.</p>
+</div>
+<!-- Kártya 4 -->
+<div class="service-card p-10 rounded-2xl">
+<i class="fas fa-couch text-4xl text-orange-500 mb-6 block"></i>
+<h3 class="text-2xl text-white mb-4">Belsőépítészet</h3>
+<p class="text-slate-400 text-sm leading-relaxed">Gipszkarton rendszerek, rejtett világítások és egyedi belsőépítészeti megoldások építése.</p>
+</div>
+<!-- Kártya 5 -->
+<div class="service-card p-10 rounded-2xl">
+<i class="fas fa-hammer text-4xl text-orange-500 mb-6 block"></i>
+<h3 class="text-2xl text-white mb-4">Bontás és Sittszállítás</h3>
+<p class="text-slate-400 text-sm leading-relaxed">Szakszerű falbontás és törmelékelszállítás. Tiszta munkaterület a felújítás kezdetétől a végéig.</p>
+</div>
+<!-- Kártya 6 -->
+<div class="service-card p-10 rounded-2xl">
+<i class="fas fa-shield-alt text-4xl text-orange-500 mb-6 block"></i>
+<h3 class="text-2xl text-white mb-4">Műszaki Ellenőrzés</h3>
+<p class="text-slate-400 text-sm leading-relaxed">Folyamatos minőségellenőrzés, hogy minden az előírt szabványok szerint készüljön el.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- 3. OLDAL/SZEKCIÓ: REFERENCIÁK (Interaktív) -->
+<section id="referenciák" class="py-32 bg-[#1e293b] px-6">
+<div class="max-w-7xl mx-auto text-center">
+<span class="text-orange-500 font-bold uppercase tracking-widest mb-4 block text-xs">Galéria</span>
+<h2 class="text-4xl md:text-6xl text-white mb-16">Látványos Eredmények</h2>
+
+<div class="reveal">
+<p class="text-slate-300 mb-8 italic">"Egy elavult panellakásból modern oázist varázsoltunk."</p>
+<div class="before-after-container" id="slider">
+<div class="after-image"></div>
+<div class="before-image" id="beforeImg"></div>
+<div class="slider-handle" id="handle"><i class="fas fa-arrows-alt-h"></i></div>
+</div>
+<p class="mt-8 text-slate-400 text-sm">Húzza el a nyilakat a különbség megtekintéséhez</p>
+</div>
+</div>
+</section>
+
+<!-- 4. OLDAL/SZEKCIÓ: RÓLUNK -->
+<section id="rólunk" class="py-32 px-6">
+<div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-20">
+<div class="lg:w-1/2 reveal">
+<div class="relative">
+<img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80" alt="Munkaterület" class="rounded-2xl shadow-2xl relative z-10">
+<div class="absolute -top-6 -left-6 w-full h-full border-2 border-orange-500 rounded-2xl z-0"></div>
+</div>
+</div>
+<div class="lg:w-1/2">
+<h2 class="text-4xl md:text-5xl text-white mb-8">Miért a Rebuild Home 2000?</h2>
+<div class="space-y-8">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center shrink-0">
+<i class="fas fa-handshake text-orange-500"></i>
+</div>
+<div>
+<h4 class="text-xl text-white mb-2 font-bold">Fix áras szerződés</h4>
+<p class="text-slate-400">Nincsenek rejtett költségek. Amit az ajánlatban lát, annyiba fog kerülni a munka.</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center shrink-0">
+<i class="fas fa-calendar-check text-orange-500"></i>
+</div>
+<div>
+<h4 class="text-xl text-white mb-2 font-bold">Határidő garancia</h4>
+<p class="text-slate-400">Tudjuk, milyen fontos a beköltözés ideje. Kötbérterhes határidőket vállalunk.</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center shrink-0">
+<i class="fas fa-star text-orange-500"></i>
+</div>
+<div>
+<h4 class="text-xl text-white mb-2 font-bold">Válogatott szakembergárda</h4>
+<p class="text-slate-400">Csak megbízható, leinformálható és tiszta munkát végző szakmabeliekkel dolgozunk.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- 5. OLDAL/SZEKCIÓ: KAPCSOLAT -->
+<section id="kapcsolat" class="py-32 bg-orange-600">
+<div class="max-w-5xl mx-auto px-6 text-center">
+<h2 class="text-4xl md:text-7xl text-white font-bold mb-8">Készen áll az átalakításra?</h2>
+<p class="text-xl text-orange-100 mb-12 max-w-2xl mx-auto">Vegye fel velünk a kapcsolatot, és kérjen egy teljesen ingyenes helyszíni felmérést!</p>
+
+<div class="flex flex-col items-center gap-8">
+<a href="tel:+36704901735" class="bg-white text-orange-600 px-12 py-6 rounded-full text-3xl font-black shadow-2xl hover:scale-110 transition flex items-center gap-4">
+<i class="fas fa-phone-alt animate-pulse"></i>
++36 70 490 1735
+</a>
+<p class="text-white/80 font-semibold tracking-widest uppercase text-sm">Hívható: H-P 08:00 - 18:00</p>
+</div>
+
+<div class="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 text-white">
+<div>
+<i class="fas fa-envelope mb-4 text-2xl"></i>
+<p class="font-bold">E-mail</p>
+<p class="text-orange-100">info@rebuildhome2000.hu</p>
+</div>
+<div>
+<i class="fas fa-map-marker-alt mb-4 text-2xl"></i>
+<p class="font-bold">Helyszín</p>
+<p class="text-orange-100">Budapest és környéke</p>
+</div>
+<div>
+<i class="fas fa-clock mb-4 text-2xl"></i>
+<p class="font-bold">Felmérés</p>
+<p class="text-orange-100">Akár 48 órán belül</p>
+</div>
+</div>
+</div>
+</section>
+
+<footer class="py-12 bg-[#080d1a] text-center text-slate-500 border-t border-white/5">
+<div class="text-white font-bold text-xl mb-4 tracking-tighter">REBUILD HOME 2000</div>
+<p class="mb-6">A lakásfelújítás szakértője.</p>
+<div class="flex justify-center gap-6 mb-8 text-xl">
+<a href="#" class="hover:text-orange-500 transition"><i class="fab fa-facebook"></i></a>
+<a href="#" class="hover:text-orange-500 transition"><i class="fab fa-instagram"></i></a>
+</div>
+<p class="text-xs">&copy; 2026 Rebuild Home 2000. Minden jog fenntartva.</p>
 </footer>
 
+<script>
+// Görgetési animáció (Reveal effekt)
+const observerOptions = { threshold: 0.15 };
+const observer = new IntersectionObserver((entries) => {
+entries.forEach(entry => {
+if (entry.isIntersecting) {
+entry.target.classList.add('active');
+}
+});
+}, observerOptions);
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Előtte-Utána csúszka vezérlés
+const slider = document.getElementById('slider');
+const beforeImg = document.getElementById('beforeImg');
+const handle = document.getElementById('handle');
+let isDragging = false;
+
+function updateSlider(e) {
+if (!isDragging && e.type !== 'touchmove' && e.type !== 'mousemove') return;
+if (e.type === 'mousemove' && !isDragging) return;
+
+const rect = slider.getBoundingClientRect();
+let x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+
+let position = (x / rect.width) * 100;
+if (position < 0) position = 0;
+if (position > 100) position = 100;
+
+beforeImg.style.width = position + '%';
+handle.style.left = position + '%';
+}
+
+slider.addEventListener('mousedown', () => isDragging = true);
+window.addEventListener('mouseup', () => isDragging = false);
+slider.addEventListener('mousemove', updateSlider);
+
+slider.addEventListener('touchstart', () => isDragging = true);
+window.addEventListener('touchend', () => isDragging = false);
+slider.addEventListener('touchmove', updateSlider);
+
+// Menü kattintás utáni görgetés javítás mobilon
+document.querySelectorAll('nav a').forEach(anchor => {
+anchor.addEventListener('click', function(e) {
+if(this.hash !== "") {
+// Itt hagyjuk a smooth scroll-t dolgozni
+}
+});
+});
+</script>
 </body>
 </html>
+
+
