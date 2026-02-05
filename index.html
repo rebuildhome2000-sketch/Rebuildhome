@@ -775,95 +775,6 @@ document.getElementById('mobile-menu').classList.toggle('translate-x-full');
 
 document.getElementById('year').textContent = new Date().getFullYear();
 lucide.createIcons();
-<!-- Footer -->
-<footer class="bg-slate-50 py-16 border-t border-slate-100">
-<div class="container mx-auto px-6">
-<div class="flex flex-col md:flex-row justify-between items-center gap-12 text-center md:text-left">
-<div>
-<div class="flex items-center gap-3 mb-4 justify-center md:justify-start">
-<div class="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center text-amber-500 font-black">RH</div>
-<span class="font-black uppercase tracking-tighter text-xl text-slate-900">REBUILD HOME 2000</span>
-</div>
-<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest max-w-xs leading-loose">
-Boros Dániel Egyéni Vállalkozó<br>
-Építőmérnöki tevékenység & Kivitelezés<br>
-Székhely: Budapest
-</p>
-</div>
-
-<div class="flex gap-12">
-<div class="text-[10px] font-black uppercase tracking-widest text-slate-400">
-<p class="text-slate-900 mb-4">Garanciák</p>
-<ul class="space-y-2">
-<li>5 Év Kivitelezési</li>
-<li>10 Év Szerkezeti</li>
-<li>Tételes Elszámolás</li>
-</ul>
-</div>
-<div class="text-[10px] font-black uppercase tracking-widest text-slate-400">
-<p class="text-slate-900 mb-4">Média</p>
-<div class="flex gap-4">
-<a href="#" class="text-xl hover:text-amber-500"><i class="fa-brands fa-instagram"></i></a>
-<a href="#" class="text-xl hover:text-amber-500"><i class="fa-brands fa-facebook-f"></i></a>
-</div>
-</div>
-</div>
-</div>
-<div class="mt-16 pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between text-[9px] font-bold text-slate-400 uppercase tracking-widest">
-<p>© 2024 Minden Jog Fenntartva - Rebuild Home 2000</p>
-<div class="flex gap-6 mt-4 md:mt-0">
-<a href="#">Adatvédelem</a>
-<a href="#">Általános Szerződési Feltételek</a>
-</div>
-</div>
-</div>
-</footer>
-
-<!-- Mobile Call FAB -->
-<a href="tel:+36704901735" class="fixed bottom-8 right-8 lg:hidden w-16 h-16 bg-amber-500 text-slate-950 rounded-full flex items-center justify-center text-2xl shadow-2xl z-[150] animate-bounce">
-<i class="fa-solid fa-phone"></i>
-</a>
-
-<script>
-// Előtte-utána slider logika
-function handleSlider(input, imgId, lineId, handleId) {
-const value = input.value;
-const img = document.getElementById(imgId);
-const line = document.getElementById(lineId);
-const handle = document.getElementById(handleId);
-
-img.style.clipPath = `inset(0 ${100 - value}% 0 0)`;
-line.style.left = `${value}%`;
-handle.style.left = `${value}%`;
-}
-
-// Mobil menü kapcsoló
-function toggleMobileMenu() {
-const menu = document.createElement('div');
-menu.id = 'mobile-menu-overlay';
-menu.className = 'fixed inset-0 bg-slate-950 z-[200] flex flex-col items-center justify-center gap-8 text-white text-3xl font-black uppercase tracking-tighter p-10';
-menu.innerHTML = `
-<button onclick="this.parentElement.remove()" class="absolute top-10 right-10 text-4xl">&times;</button>
-<a href="#munkaterulet" onclick="this.parentElement.remove()">Helyszínek</a>
-<a href="#szakmak" onclick="this.parentElement.remove()">Szakágak</a>
-<a href="#referenciak" onclick="this.parentElement.remove()">Referenciák</a>
-<a href="#kapcsolat" onclick="this.parentElement.remove()" class="text-amber-500 underline underline-offset-8">Kapcsolat</a>
-<div class="mt-12 text-sm font-bold text-slate-500 text-center uppercase tracking-widest">
-Hívható: H-P 08:30 - 18:30<br>
-+36 70 490 1735
-</div>
-`;
-document.body.appendChild(menu);
-}
-
-// Gördülékeny navigáció
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-anchor.addEventListener('click', function (e) {
-e.preventDefault();
-const target = document.querySelector(this.getAttribute('href'));
-if(target) {
-target.scrollIntoView({
-behavior: 'smooth'
 });
 }
 });
@@ -871,6 +782,7 @@ behavior: 'smooth'
 </script>
 </body>
 </html>
+
 
 
 
