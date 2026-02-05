@@ -612,7 +612,6 @@ const faqs = [
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
-  
 <style>
 #rebuild-portfolio-root .comparison-slider {
 position: relative;
@@ -851,36 +850,7 @@ transform: translateY(-8px);
 <i class="fa-solid fa-calendar-check"></i> Ingyenes Helyszíni Felmérés
 </a>
 </div>
-</div>
-
-<script>
-/**
-* Csúszka kezelő függvény, amely a specifikus ID-k alapján működik,
-* elkerülve az ütközést a befogadó weboldal egyéb elemeivel.
-*/
-function updateEmbedSlider(input, beforeId, handleId) {
-const val = input.value;
-const before = document.getElementById(beforeId);
-const handle = document.getElementById(handleId);
-
-if(before) before.style.clipPath = `inset(0 ${100 - val}% 0 0)`;
-if(handle) handle.style.left = `${val}%`;
-}
 </script>
-</div>
-
-// Projects
-const projects = [
-{
-title: "V. kerületi Polgári Luxus",
-before: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=1200",
-after: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80&w=1200",
-specs: "125 m2 • Hőszivattyú • 4.5 hónap",
-desc: "Teljes körű rekonstrukció egy 100 éves bérházban.",
-problem: "Omladozó vakolat, 60 éves gépészet.",
-solution: "Acélgerendás kiváltás, falvarrás technológia."
-}
-];
 
 // Render Functions
 const grid = document.getElementById('services-grid');
