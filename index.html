@@ -607,6 +607,267 @@ const faqs = [
 { q: "Hogyan történik az elszámolás?", a: "Szakaszosan, a készültségi foknak megfelelően számolunk el. Ön csak azért fizet, ami már elvégezve és átvéve lett." },
 { q: "Saját szakemberekkel dolgoznak?", a: "Igen, állandó, összeszokott csapattal dolgozunk, akiket mérnöki felügyelet alatt tartok. Nem alkalmazunk ellenőrizetlen alvállalkozói láncokat." }
 ];
+<div id="rebuild-portfolio-root" class="bg-slate-50 py-16 md:py-24 px-4 sm:px-6 font-sans overflow-hidden">
+<!-- Tailwind CSS (ha a főoldalon nincs jelen, ez betölti, de nem ütközik) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+  
+<style>
+#rebuild-portfolio-root .comparison-slider {
+position: relative;
+width: 100%;
+height: 250px;
+overflow: hidden;
+border-radius: 1.5rem 1.5rem 0 0;
+touch-action: pan-y;
+background: #000;
+}
+
+@media (min-width: 768px) {
+#rebuild-portfolio-root .comparison-slider { height: 320px; }
+}
+
+#rebuild-portfolio-root .comparison-slider img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+position: absolute;
+top: 0;
+left: 0;
+pointer-events: none;
+}
+
+/* Automatikus fekete-fehér filter az Előtte képekre */
+#rebuild-portfolio-root .img-before {
+z-index: 10;
+clip-path: inset(0 50% 0 0);
+filter: grayscale(100%) brightness(0.8);
+}
+
+#rebuild-portfolio-root .slider-handle {
+position: absolute;
+top: 0;
+bottom: 0;
+left: 50%;
+width: 4px;
+background: #F59E0B;
+z-index: 20;
+transform: translateX(-50%);
+pointer-events: none;
+}
+
+#rebuild-portfolio-root .slider-button {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+width: 32px;
+height: 32px;
+background: #F59E0B;
+border-radius: 50%;
+border: 2px solid white;
+display: flex;
+align-items: center;
+justify-content: center;
+color: white;
+box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+#rebuild-portfolio-root .slider-input {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+opacity: 0;
+z-index: 30;
+cursor: ew-resize;
+-webkit-tap-highlight-color: transparent;
+}
+
+#rebuild-portfolio-root .label-tag {
+position: absolute;
+bottom: 12px;
+padding: 3px 10px;
+background: rgba(15, 23, 42, 0.7);
+color: white;
+font-size: 9px;
+font-weight: 800;
+text-transform: uppercase;
+border-radius: 4px;
+z-index: 25;
+letter-spacing: 0.05em;
+}
+
+#rebuild-portfolio-root .project-card {
+transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+#rebuild-portfolio-root .project-card:hover {
+transform: translateY(-8px);
+}
+</style>
+
+<div class="max-w-6xl mx-auto">
+<!-- Címsor -->
+<div class="text-center mb-16">
+<span class="text-amber-500 font-bold uppercase tracking-[0.3em] text-[10px] mb-2 block">Boros Dániel építőmérnök</span>
+<h2 class="text-3xl md:text-5xl font-black text-slate-900 uppercase tracking-tighter">Átadott <span class="text-amber-500">Referenciáink</span></h2>
+<div class="w-16 h-1 bg-amber-500 mx-auto mt-4"></div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+
+<!-- Projekt 1: Fürdő -->
+<div class="project-card bg-slate-900 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col text-white">
+<div class="comparison-slider">
+<span class="label-tag left-3" style="left: 12px">Előtte</span>
+<span class="label-tag right-3" style="right: 12px">Utána</span>
+<img src="https://images.unsplash.com/photo-1620626011761-9963d7b59a7a?auto=format&fit=crop&q=80&w=800" alt="Utána">
+<img src="https://images.unsplash.com/photo-1584622781564-1d9876a13d00?auto=format&fit=crop&q=80&w=800" alt="Előtte" class="img-before" id="embed-p1-before">
+<div class="slider-handle" id="embed-p1-handle"><div class="slider-button"><i class="fa-solid fa-arrows-left-right text-[10px]"></i></div></div>
+<input type="range" min="0" max="100" value="50" class="slider-input" oninput="updateEmbedSlider(this, 'embed-p1-before', 'embed-p1-handle')">
+</div>
+<div class="p-8">
+<div class="flex justify-between items-start mb-6">
+<h3 class="text-xl font-black uppercase tracking-tighter leading-tight">Fürdőszoba <br>Modernizáció</h3>
+<div class="text-right">
+<span class="text-[8px] font-bold text-slate-500 uppercase block">Költségkeret</span>
+<span class="text-lg font-black text-amber-500 tracking-tighter">1.400.000 Ft</span>
+</div>
+</div>
+<ul class="text-[10px] font-bold text-slate-300 space-y-3 uppercase tracking-wide mb-8">
+<li><i class="fa-solid fa-check text-amber-500 mr-2"></i> Régi hálózat és burkolat bontása</li>
+<li><i class="fa-solid fa-check text-amber-500 mr-2"></i> Új vízvezetékek és kiállások</li>
+<li><i class="fa-solid fa-check text-amber-500 mr-2"></i> Mapei vízszigetelési rendszer</li>
+<li><i class="fa-solid fa-check text-amber-500 mr-2"></i> Precíziós greslap burkolás</li>
+</ul>
+<div class="flex items-center gap-3 border-t border-white/10 pt-6">
+<span class="text-[8px] font-black bg-white/10 px-3 py-1 rounded-full uppercase">4.5 m²</span>
+<span class="text-[8px] font-black bg-white/10 px-3 py-1 rounded-full uppercase">10 Munkanap</span>
+</div>
+</div>
+</div>
+
+<!-- Projekt 2: Garzon -->
+<div class="project-card bg-slate-900 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col text-white">
+<div class="comparison-slider">
+<span class="label-tag" style="left: 12px">Előtte</span>
+<span class="label-tag" style="right: 12px">Utána</span>
+<img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&q=80&w=800" alt="Utána">
+<img src="https://images.unsplash.com/photo-1516455590571-18256e5bb9ff?auto=format&fit=crop&q=80&w=800" alt="Előtte" class="img-before" id="embed-p2-before">
+<div class="slider-handle" id="embed-p2-handle"><div class="slider-button"><i class="fa-solid fa-arrows-left-right text-[10px]"></i></div></div>
+<input type="range" min="0" max="100" value="50" class="slider-input" oninput="updateEmbedSlider(this, 'embed-p2-before', 'embed-p2-handle')">
+</div>
+<div class="p-8">
+<div class="flex justify-between items-start mb-6">
+<h3 class="text-xl font-black uppercase tracking-tighter leading-tight">Garzon <br>Újjászületés</h3>
+<div class="text-right">
+<span class="text-[8px] font-bold text-slate-500 uppercase block">Költségkeret</span>
+<span class="text-lg font-black text-amber-500 tracking-tighter">3.850.000 Ft</span>
+</div>
+</div>
+<ul class="text-[10px] font-bold text-slate-300 space-y-3 uppercase tracking-wide mb-8">
+<li><i class="fa-solid fa-check text-amber-500 mr-2"></i> Teljes elektromos hálózat csere</li>
+<li><i class="fa-solid fa-check text-amber-500 mr-2"></i> Knauf gépi vakolás és glettelés</li>
+<li><i class="fa-solid fa-check text-amber-500 mr-2"></i> AC4 laminált parkettázás</li>
+<li><i class="fa-solid fa-check text-amber-500 mr-2"></i> Nyílászárók beállítása és mázolás</li>
+</ul>
+<div class="flex items-center gap-3 border-t border-white/10 pt-6">
+<span class="text-[8px] font-black bg-white/10 px-3 py-1 rounded-full uppercase">35 m²</span>
+<span class="text-[8px] font-black bg-white/10 px-3 py-1 rounded-full uppercase">5 Hét</span>
+</div>
+</div>
+</div>
+
+<!-- Projekt 3: Panel -->
+<div class="project-card bg-slate-900 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col text-white">
+<div class="comparison-slider">
+<span class="label-tag" style="left: 12px">Előtte</span>
+<span class="label-tag" style="right: 12px">Utána</span>
+<img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&q=80&w=800" alt="Utána">
+<img src="https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&q=80&w=800" alt="Előtte" class="img-before" id="embed-p3-before">
+<div class="slider-handle" id="embed-p3-handle"><div class="slider-button"><i class="fa-solid fa-arrows-left-right text-[10px]"></i></div></div>
+<input type="range" min="0" max="100" value="50" class="slider-input" oninput="updateEmbedSlider(this, 'embed-p3-before', 'embed-p3-handle')">
+</div>
+<div class="p-8">
+<div class="flex justify-between items-start mb-6">
+<h3 class="text-xl font-black uppercase tracking-tighter leading-tight">Panel Generál <br>Kivitelezés</h3>
+<div class="text-right">
+<span class="text-[8px] font-bold text-slate-500 uppercase block">Költségkeret</span>
+<span class="text-lg font-black text-amber-500 tracking-tighter">6.200.000 Ft</span>
+</div>
+</div>
+<ul class="text-[10px] font-bold text-slate-300 space-y-3 uppercase tracking-wide mb-8">
+<li><i class="fa-solid fa-check text-amber-500 mr-2"></i> Válaszfalak statikai bontása</li>
+<li><i class="fa-solid fa-check text-amber-500 mr-2"></i> Új gépészet és 32A bővítés</li>
+<li><i class="fa-solid fa-check text-amber-500 mr-2"></i> Rejtett LED és álmennyezet</li>
+<li><i class="fa-solid fa-check text-amber-500 mr-2"></i> Komplett festés és burkolás</li>
+</ul>
+<div class="flex items-center gap-3 border-t border-white/10 pt-6">
+<span class="text-[8px] font-black bg-white/10 px-3 py-1 rounded-full uppercase">68 m²</span>
+<span class="text-[8px] font-black bg-white/10 px-3 py-1 rounded-full uppercase">9 Hét</span>
+</div>
+</div>
+</div>
+
+<!-- Projekt 4: Polgári -->
+<div class="project-card bg-slate-900 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col text-white">
+<div class="comparison-slider">
+<span class="label-tag" style="left: 12px">Előtte</span>
+<span class="label-tag" style="right: 12px">Utána</span>
+<img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=800" alt="Utána">
+<img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=800" alt="Előtte" class="img-before" id="embed-p4-before">
+<div class="slider-handle" id="embed-p4-handle"><div class="slider-button"><i class="fa-solid fa-arrows-left-right text-[10px]"></i></div></div>
+<input type="range" min="0" max="100" value="50" class="slider-input" oninput="updateEmbedSlider(this, 'embed-p4-before', 'embed-p4-handle')">
+</div>
+<div class="p-8">
+<div class="flex justify-between items-start mb-6">
+<h3 class="text-xl font-black uppercase tracking-tighter leading-tight">Nagypolgári <br>Luxus Rekonstrukció</h3>
+<div class="text-right">
+<span class="text-[8px] font-bold text-slate-500 uppercase block">Költségkeret</span>
+<span class="text-lg font-black text-amber-500 tracking-tighter">9.600.000 Ft</span>
+</div>
+</div>
+<ul class="text-[10px] font-bold text-slate-300 space-y-3 uppercase tracking-wide mb-8">
+<li><i class="fa-solid fa-check text-amber-500 mr-2"></i> Eredeti stukkók restaurálása</li>
+<li><i class="fa-solid fa-check text-amber-500 mr-2"></i> Okosotthon (Loxone) kiépítése</li>
+<li><i class="fa-solid fa-check text-amber-500 mr-2"></i> Nagyméretű (120x240) greslapok</li>
+<li><i class="fa-solid fa-check text-amber-500 mr-2"></i> Valódi tölgyfa halszálka parketta</li>
+</ul>
+<div class="flex items-center gap-3 border-t border-white/10 pt-6">
+<span class="text-[8px] font-black bg-white/10 px-3 py-1 rounded-full uppercase">85 m²</span>
+<span class="text-[8px] font-black bg-white/10 px-3 py-1 rounded-full uppercase">4.5 Hónap</span>
+</div>
+</div>
+</div>
+
+</div>
+
+<!-- Ingyenes felmérés gomb -->
+<div class="mt-16 text-center">
+<a href="tel:+36704901735" class="inline-flex items-center gap-3 bg-amber-500 text-slate-900 px-10 py-5 rounded-2xl font-black uppercase text-xs tracking-widest hover:scale-105 transition-all shadow-xl shadow-amber-500/20">
+<i class="fa-solid fa-calendar-check"></i> Ingyenes Helyszíni Felmérés
+</a>
+</div>
+</div>
+
+<script>
+/**
+* Csúszka kezelő függvény, amely a specifikus ID-k alapján működik,
+* elkerülve az ütközést a befogadó weboldal egyéb elemeivel.
+*/
+function updateEmbedSlider(input, beforeId, handleId) {
+const val = input.value;
+const before = document.getElementById(beforeId);
+const handle = document.getElementById(handleId);
+
+if(before) before.style.clipPath = `inset(0 ${100 - val}% 0 0)`;
+if(handle) handle.style.left = `${val}%`;
+}
+</script>
+</div>
 
 // Projects
 const projects = [
