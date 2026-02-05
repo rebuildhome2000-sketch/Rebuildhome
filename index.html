@@ -958,12 +958,13 @@ projEl.innerHTML = `
 </div>
 </div>
 </div>
-`;
+<
+  
 projContainer.appendChild(projEl);
 const img = projEl.querySelector('.slider-before-img');
 img.style.width = projEl.querySelector('img').offsetWidth + 'px';
 });
-
+<
 function updateSlider(input, idx) {
 document.getElementById(`slider-${idx}`).style.width = input.value + '%';
 document.getElementById(`handle-${idx}`).style.left = input.value + '%';
@@ -992,6 +993,7 @@ document.querySelectorAll('.nav-link').forEach(l => l.classList.replace('text-wh
 document.getElementById('logo-text').classList.replace('text-white', 'text-slate-900');
 document.querySelector('.logo-path-main').setAttribute('stroke', '#0F172A');
 } else {
+  <
 nav.classList.add('bg-transparent', 'py-4');
 nav.classList.remove('bg-white/95', 'backdrop-blur-md', 'shadow-md', 'py-2');
 document.querySelectorAll('.nav-link').forEach(l => l.classList.replace('text-slate-900', 'text-white'));
@@ -999,7 +1001,7 @@ document.getElementById('logo-text').classList.replace('text-slate-900', 'text-w
 document.querySelector('.logo-path-main').setAttribute('stroke', 'white');
 }
 });
-
+<
 function toggleMenu() {
 document.getElementById('mobile-menu').classList.toggle('translate-x-full');
 }
@@ -1009,7 +1011,7 @@ lucide.createIcons();
 </script>
 </body>
 </html>
-
+ 
 
 
 
