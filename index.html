@@ -10,334 +10,194 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
-
-        /* Animációk */
         .service-detail { display: none; animation: slide-down 0.4s ease forwards; }
         .active-service { display: block !important; }
         @keyframes slide-down { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
         .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
         .faq-item.active .faq-answer { max-height: 500px; padding-top: 1rem; }
-        .faq-item.active .faq-icon { transform: rotate(180deg); }
-
-        /* Slider */
-        .comparison-slider { position: relative; width: 100%; height: 300px; overflow: hidden; border-radius: 1.5rem 1.5rem 0 0; background: #000; }
+        
+        /* Portfolio Slider */
+        .comparison-slider { position: relative; width: 100%; height: 350px; overflow: hidden; border-radius: 2rem; background: #000; }
         .comparison-slider img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; }
         .img-before { z-index: 10; clip-path: inset(0 50% 0 0); filter: grayscale(100%); }
         .slider-handle { position: absolute; top: 0; bottom: 0; left: 50%; width: 4px; background: #F59E0B; z-index: 20; transform: translateX(-50%); }
-        .slider-button { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 30px; height: 30px; background: #F59E0B; border-radius: 50%; border: 2px solid white; display: flex; items-center justify-center; color: white; }
+        .slider-button { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; background: #F59E0B; border-radius: 50%; border: 3px solid white; display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 0 20px rgba(0,0,0,0.3); }
         .slider-input { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; z-index: 30; cursor: ew-resize; }
+        
+        /* Floating Call Button */
+        .call-float { position: fixed; bottom: 30px; right: 30px; z-index: 1000; background: #F59E0B; color: #000; width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(245, 158, 11, 0.4); animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); } 70% { transform: scale(1.1); box-shadow: 0 0 0 20px rgba(245, 158, 11, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); } }
     </style>
 </head>
-<body class="bg-white text-slate-900">
+<body class="bg-slate-50 text-slate-900">
+
+<a href="tel:+36704901735" class="call-float">
+    <i data-lucide="phone" class="w-8 h-8"></i>
+</a>
 
 <nav class="fixed w-full z-[100] bg-slate-950/95 backdrop-blur-md py-4 border-b border-white/5">
     <div class="container mx-auto px-4 flex justify-between items-center">
         <div class="flex flex-col cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
             <span class="text-xl font-black text-white uppercase leading-none">REBUILD<span class="text-amber-500">HOME</span></span>
-            <span class="text-[8px] font-bold tracking-[0.3em] text-amber-400 uppercase mt-1">Építőmérnöki Kivitelezés</span>
+            <span class="text-[8px] font-bold tracking-[0.3em] text-amber-400 uppercase mt-1">Est. 2000 • Mérnöki Iroda</span>
         </div>
         <div class="hidden lg:flex items-center gap-8 font-black text-[10px] uppercase tracking-widest text-white">
             <a href="#bemutatkozas" class="hover:text-amber-500 transition-colors">Rólunk</a>
-            <a href="#szolgaltatasok" class="hover:text-amber-500 transition-colors">Szolgáltatások</a>
-            <a href="#velemenyek" class="hover:text-amber-500 transition-colors">Vélemények</a>
-            <a href="#projektek" class="hover:text-amber-500 transition-colors">Referenciák</a>
-            <a href="#palyazat" class="hover:text-amber-500 transition-colors">Pályázat</a>
-            <a href="#kapcsolat" class="bg-amber-500 text-slate-900 px-6 py-3 rounded-xl hover:bg-white transition-all">Ajánlat</a>
+            <a href="#projektek" class="hover:text-amber-500 transition-colors">Portfólió</a>
+            <a href="#dijak" class="hover:text-amber-500 transition-colors">Díjak</a>
+            <a href="#velemenyek" class="hover:text-amber-500 transition-colors">Értékelések</a>
+            <a href="#kapcsolat" class="bg-amber-500 text-slate-900 px-6 py-3 rounded-xl hover:bg-white transition-all">Ajánlatkérés</a>
         </div>
     </div>
 </nav>
 
 <section class="relative min-h-screen flex items-center bg-slate-950 pt-20">
-    <div class="absolute inset-0 opacity-40">
-        <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=2000" class="w-full h-full object-cover">
-    </div>
+    <div class="absolute inset-0"><img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=2000" class="w-full h-full object-cover opacity-30"></div>
     <div class="container mx-auto px-6 relative z-10">
         <div class="max-w-4xl">
-            <div class="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full mb-8">
-                <span class="text-amber-500 font-bold uppercase tracking-widest text-[8px]">50M Ft Felelősségbiztosítás</span>
-            </div>
-            <h1 class="text-6xl md:text-8xl font-black text-white leading-tight mb-8 tracking-tighter uppercase">PRÉMIUM<br><span class="text-amber-500">KIVITELEZÉS.</span></h1>
-            <p class="text-xl text-slate-300 mb-10 max-w-xl font-medium leading-relaxed">Boros Dániel építőmérnök szakmai felügyeletével. 20 év tapasztalat, fix határidők és tiszta elszámolás.</p>
+            <h1 class="text-6xl md:text-9xl font-black text-white leading-[0.9] mb-8 tracking-tighter uppercase italic">Mérnöki<br><span class="text-amber-500">Precízió.</span></h1>
+            <p class="text-xl text-slate-300 mb-10 max-w-xl font-medium leading-relaxed">Boros Dániel építőmérnök irányításával. 50 millió Ft-os biztosítással, 20+ év szakmai múlttal.</p>
             <div class="flex flex-wrap gap-4">
-                <a href="#kapcsolat" class="bg-amber-500 text-slate-900 font-black px-10 py-5 rounded-2xl uppercase hover:bg-white transition-all shadow-xl">Ajánlatot kérek</a>
-                <a href="tel:+36704901735" class="bg-white/10 text-white font-black px-10 py-5 rounded-2xl uppercase backdrop-blur-md border border-white/20 hover:bg-white/20 transition-all">+36 70 490 1735</a>
+                <a href="#kapcsolat" class="bg-amber-500 text-slate-900 font-black px-10 py-5 rounded-2xl uppercase hover:bg-white transition-all shadow-xl text-lg">Azonnali ajánlat</a>
+                <div class="flex items-center gap-3 px-6 py-4 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-sm">
+                    <div class="flex text-amber-500"><i data-lucide="star" class="fill-current w-4"></i><i data-lucide="star" class="fill-current w-4"></i><i data-lucide="star" class="fill-current w-4"></i><i data-lucide="star" class="fill-current w-4"></i><i data-lucide="star" class="fill-current w-4"></i></div>
+                    <span class="text-white font-bold text-sm tracking-widest">4.9 / 5.0</span>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<section id="bemutatkozas" class="py-24 bg-white">
+<section id="dijak" class="py-20 bg-white">
     <div class="container mx-auto px-6">
-        <div class="flex flex-col lg:flex-row gap-16 items-center">
-            <div class="lg:w-1/2">
-                <h2 class="text-amber-600 font-black text-[10px] uppercase mb-4 tracking-[0.2em]">Szakértelem</h2>
-                <h3 class="text-4xl md:text-6xl font-black text-slate-900 uppercase mb-8 leading-none">Boros Dániel<br>Építőmérnök</h3>
-                <p class="text-slate-600 text-lg leading-relaxed mb-6 font-medium">BME diplomámmal és két évtizedes kivitelezői múltammal garantálom a mérnöki pontosságot. Nem csak "mesteremberek" vagyunk, hanem technológiailag képzett szakemberek.</p>
-                <div class="grid grid-cols-2 gap-6 mb-8">
-                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100">
-                        <i data-lucide="award" class="text-amber-500 mb-4"></i>
-                        <h4 class="font-black text-xs uppercase mb-1">Mérnöki Diploma</h4>
-                        <p class="text-[10px] text-slate-500 uppercase">Budapesti Műszaki Egyetem</p>
-                    </div>
-                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100">
-                        <i data-lucide="shield-check" class="text-amber-500 mb-4"></i>
-                        <h4 class="font-black text-xs uppercase mb-1">Regisztrált Tag</h4>
-                        <p class="text-[10px] text-slate-500 uppercase">Kamarai Nyilvántartás</p>
-                    </div>
-                </div>
-                <div class="p-6 bg-green-50 rounded-3xl border border-green-100 flex items-center gap-4">
-                    <div class="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center text-white shrink-0"><i data-lucide="check-circle"></i></div>
-                    <p class="text-sm font-bold text-green-800 uppercase tracking-tight">Vállalásainkat 50 millió Ft-os generálkivitelezői biztosítás védi.</p>
-                </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-12 items-center opacity-60 grayscale hover:grayscale-0 transition-all">
+            <div class="flex flex-col items-center gap-2">
+                <i data-lucide="award" class="w-12 h-12 text-slate-800"></i>
+                <span class="text-[10px] font-black uppercase text-center tracking-tighter">Év Kivitelezője<br>2022 Jelölt</span>
             </div>
-            <div class="lg:w-1/2 relative">
-                <img src="https://images.unsplash.com/photo-1541913053965-0348903e8cc5?auto=format&fit=crop&q=80&w=1200" class="rounded-[3rem] shadow-2xl relative z-10">
-                <div class="absolute -bottom-10 -left-10 w-64 h-64 bg-amber-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+            <div class="flex flex-col items-center gap-2">
+                <i data-lucide="check-circle" class="w-12 h-12 text-slate-800"></i>
+                <span class="text-[10px] font-black uppercase text-center tracking-tighter">BME Mérnöki<br>Tanúsítvány</span>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+                <i data-lucide="shield" class="w-12 h-12 text-slate-800"></i>
+                <span class="text-[10px] font-black uppercase text-center tracking-tighter">MÉK Regisztrált<br>Partner</span>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+                <i data-lucide="users" class="w-12 h-12 text-slate-800"></i>
+                <span class="text-[10px] font-black uppercase text-center tracking-tighter">500+ Sikeres<br>Projekt</span>
             </div>
         </div>
     </div>
 </section>
 
-<section id="szolgaltatasok" class="py-24 bg-slate-50">
+<section id="projektek" class="py-24 bg-slate-900">
     <div class="container mx-auto px-6">
-        <div class="text-center mb-16">
-            <h2 class="text-amber-600 font-black text-[10px] uppercase mb-4 tracking-[0.2em]">Szolgáltatások</h2>
-            <h3 class="text-4xl md:text-5xl font-black text-slate-900 uppercase">Komplett Kivitelezés</h3>
-        </div>
-        <div id="services-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"></div>
-        <div id="service-details-container"></div>
-    </div>
-</section>
-
-<section id="velemenyek" class="py-24 bg-slate-950 text-white relative overflow-hidden">
-    <div class="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full blur-[100px]"></div>
-    <div class="container mx-auto px-6 relative z-10">
-        <div class="text-center mb-16">
-            <h2 class="text-amber-500 font-black text-[10px] uppercase mb-4 tracking-[0.2em]">Ügyfélvisszajelzések</h2>
-            <h3 class="text-4xl md:text-5xl font-black uppercase">Akik minket választottak</h3>
-        </div>
-        <div class="grid md:grid-cols-3 gap-8">
-            <div class="bg-white/5 p-10 rounded-[2.5rem] border border-white/10 hover:bg-white/10 transition-all">
-                <div class="flex text-amber-500 mb-6"><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i></div>
-                <p class="text-slate-300 italic mb-8 font-medium leading-relaxed">"Boros Dániel mérnöki precizitása minden várakozásunkat felülmúlta. A lakásfelújítás során végig biztonságban éreztük magunkat, mert minden szakaszról pontos dokumentációt kaptunk. Ritka az ilyen tiszta munkavégzés."</p>
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 bg-amber-500 rounded-full flex items-center justify-center font-black text-slate-900">HZ</div>
-                    <div><h4 class="font-black uppercase text-xs">H. Zoltán</h4><p class="text-[10px] text-slate-500 uppercase">Budapest, XII. kerület</p></div>
-                </div>
-            </div>
-            <div class="bg-white/5 p-10 rounded-[2.5rem] border border-white/10 hover:bg-white/10 transition-all">
-                <div class="flex text-amber-500 mb-6"><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i></div>
-                <p class="text-slate-300 italic mb-8 font-medium leading-relaxed">"A kivitelezői biztosítás miatt választottuk őket egy nagy értékű polgári lakás felújításához. Nem csalódtunk. A csapat kulturált volt, a határidőt pedig napra pontosan betartották. Csak ajánlani tudom!"</p>
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 bg-amber-500 rounded-full flex items-center justify-center font-black text-slate-900">VK</div>
-                    <div><h4 class="font-black uppercase text-xs">V. Katalin</h4><p class="text-[10px] text-slate-500 uppercase">Szentendre</p></div>
-                </div>
-            </div>
-            <div class="bg-white/5 p-10 rounded-[2.5rem] border border-white/10 hover:bg-white/10 transition-all">
-                <div class="flex text-amber-500 mb-6"><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i></div>
-                <p class="text-slate-300 italic mb-8 font-medium leading-relaxed">"A pályázati dokumentációban is segítettek, ami óriási könnyebbséget jelentett. A számlázásuk és a költségvetésük tiszta és átlátható volt, nem voltak rejtett költségek a végén sem."</p>
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 bg-amber-500 rounded-full flex items-center justify-center font-black text-slate-900">SP</div>
-                    <div><h4 class="font-black uppercase text-xs">S. Péter</h4><p class="text-[10px] text-slate-500 uppercase">Budaörs</p></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section id="folyamat" class="py-24 bg-white">
-    <div class="container mx-auto px-6">
-        <h3 class="text-4xl font-black text-center mb-16 uppercase tracking-tighter">A Munka Menete</h3>
-        <div class="grid md:grid-cols-4 gap-8">
-            <div class="p-8 bg-slate-50 rounded-3xl border border-slate-100 relative">
-                <span class="text-6xl font-black text-amber-500/10 absolute top-4 right-4 leading-none">01</span>
-                <h4 class="font-black uppercase mb-4 relative z-10">Felmérés</h4>
-                <p class="text-xs text-slate-500 font-medium">Lézeres mérés és mérnöki diagnosztika a helyszínen.</p>
-            </div>
-            <div class="p-8 bg-slate-50 rounded-3xl border border-slate-100 relative">
-                <span class="text-6xl font-black text-amber-500/10 absolute top-4 right-4 leading-none">02</span>
-                <h4 class="font-black uppercase mb-4 relative z-10">Ajánlat</h4>
-                <p class="text-xs text-slate-500 font-medium">Tételes, mindenre kiterjedő írásos kalkuláció.</p>
-            </div>
-            <div class="p-8 bg-slate-50 rounded-3xl border border-slate-100 relative">
-                <span class="text-6xl font-black text-amber-500/10 absolute top-4 right-4 leading-none">03</span>
-                <h4 class="font-black uppercase mb-4 relative z-10">Kivitelezés</h4>
-                <p class="text-xs text-slate-500 font-medium">Szakaszos átadás és E-napló vezetés.</p>
-            </div>
-            <div class="p-8 bg-slate-50 rounded-3xl border border-slate-100 relative">
-                <span class="text-6xl font-black text-amber-500/10 absolute top-4 right-4 leading-none">04</span>
-                <h4 class="font-black uppercase mb-4 relative z-10">Átadás</h4>
-                <p class="text-xs text-slate-500 font-medium">Végső jegyzőkönyv és garanciajegy átadása.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section id="projektek" class="py-24 bg-slate-50">
-    <div class="container mx-auto px-6">
-        <h3 class="text-4xl font-black text-center mb-16 uppercase">Referenciák</h3>
+        <h3 class="text-5xl font-black text-white text-center mb-16 uppercase italic tracking-tighter">Referenciáink</h3>
         <div class="grid md:grid-cols-2 gap-12">
-            <div class="bg-slate-900 rounded-[2.5rem] overflow-hidden shadow-2xl">
+            <div class="group cursor-pointer">
                 <div class="comparison-slider">
                     <img src="https://images.unsplash.com/photo-1620626011761-9963d7b59a7a?auto=format&fit=crop&q=80&w=800" alt="Utána">
                     <img src="https://images.unsplash.com/photo-1584622781564-1d9876a13d00?auto=format&fit=crop&q=80&w=800" class="img-before" id="p1-before">
                     <div class="slider-handle" id="p1-handle"><div class="slider-button"><i class="fa-solid fa-arrows-left-right"></i></div></div>
                     <input type="range" min="0" max="100" value="50" class="slider-input" oninput="updateSlider(this, 'p1-before', 'p1-handle')">
                 </div>
-                <div class="p-8 text-white">
-                    <h4 class="text-xl font-black uppercase mb-2">Modern Fürdőszoba</h4>
-                    <p class="text-amber-500 font-black text-xs uppercase">1.4M Ft • Mapei Rendszer</p>
+                <div class="mt-6 flex justify-between items-center">
+                    <h4 class="text-white font-black text-xl uppercase italic">Luxus Fürdőszoba</h4>
+                    <span class="text-amber-500 font-bold">1.400.000 Ft</span>
                 </div>
             </div>
-            <div class="bg-slate-900 rounded-[2.5rem] overflow-hidden shadow-2xl">
+            <div class="group cursor-pointer">
                 <div class="comparison-slider">
                     <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&q=80&w=800" alt="Utána">
                     <img src="https://images.unsplash.com/photo-1516455590571-18256e5bb9ff?auto=format&fit=crop&q=80&w=800" class="img-before" id="p2-before">
                     <div class="slider-handle" id="p2-handle"><div class="slider-button"><i class="fa-solid fa-arrows-left-right"></i></div></div>
                     <input type="range" min="0" max="100" value="50" class="slider-input" oninput="updateSlider(this, 'p2-before', 'p2-handle')">
                 </div>
-                <div class="p-8 text-white">
-                    <h4 class="text-xl font-black uppercase mb-2">Minimalista Garzon</h4>
-                    <p class="text-amber-500 font-black text-xs uppercase">3.8M Ft • Komplett Kivitelezés</p>
-                </div>
-            </div>
-            <div class="bg-slate-900 rounded-[2.5rem] overflow-hidden shadow-2xl">
-                <div class="comparison-slider">
-                    <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&q=80&w=800" alt="Utána">
-                    <img src="https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&q=80&w=800" class="img-before" id="p3-before">
-                    <div class="slider-handle" id="p3-handle"><div class="slider-button"><i class="fa-solid fa-arrows-left-right"></i></div></div>
-                    <input type="range" min="0" max="100" value="50" class="slider-input" oninput="updateSlider(this, 'p3-before', 'p3-handle')">
-                </div>
-                <div class="p-8 text-white">
-                    <h4 class="text-xl font-black uppercase mb-2">Panel Átalakítás</h4>
-                    <p class="text-amber-500 font-black text-xs uppercase">6.2M Ft • Falbontással</p>
-                </div>
-            </div>
-            <div class="bg-slate-900 rounded-[2.5rem] overflow-hidden shadow-2xl">
-                <div class="comparison-slider">
-                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=800" alt="Utána">
-                    <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=800" class="img-before" id="p4-before">
-                    <div class="slider-handle" id="p4-handle"><div class="slider-button"><i class="fa-solid fa-arrows-left-right"></i></div></div>
-                    <input type="range" min="0" max="100" value="50" class="slider-input" oninput="updateSlider(this, 'p4-before', 'p4-handle')">
-                </div>
-                <div class="p-8 text-white">
-                    <h4 class="text-xl font-black uppercase mb-2">Polgári Lakás Luxus</h4>
-                    <p class="text-amber-500 font-black text-xs uppercase">9.6M Ft • Restaurálással</p>
+                <div class="mt-6 flex justify-between items-center">
+                    <h4 class="text-white font-black text-xl uppercase italic">Belvárosi Garzon</h4>
+                    <span class="text-amber-500 font-bold">3.850.000 Ft</span>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<section id="palyazat" class="py-24 bg-white">
+<section id="velemenyek" class="py-24 bg-white overflow-hidden">
     <div class="container mx-auto px-6">
-        <h3 class="text-4xl font-black text-center mb-16 uppercase">Állami Támogatások</h3>
-        <div class="grid md:grid-cols-2 gap-8">
-            <div class="p-10 bg-slate-50 rounded-[3rem] border border-slate-200">
-                <h4 class="text-2xl font-black mb-4 uppercase">Otthonfelújítás 2024</h4>
-                <p class="text-slate-600 mb-6 font-medium leading-relaxed">Akár 6 millió Ft állami támogatás energetikai korszerűsítésre. Segítünk a műszaki dokumentációban.</p>
-                <div class="bg-amber-500/10 text-amber-700 p-4 rounded-xl text-xs font-black uppercase">Mérnöki energetikai tanúsítvánnyal</div>
+        <div class="flex flex-col lg:flex-row gap-16">
+            <div class="lg:w-1/3">
+                <h2 class="text-amber-600 font-black text-[10px] uppercase mb-4 tracking-widest">Ügyfél elégedettség</h2>
+                <h3 class="text-4xl font-black text-slate-900 uppercase leading-none mb-8 italic">Mit mondanak<br>rólunk?</h3>
+                <div class="bg-slate-50 p-8 rounded-[2rem] border border-slate-100">
+                    <div class="text-5xl font-black text-slate-900 mb-2">4.9</div>
+                    <div class="flex text-amber-500 mb-4"><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i><i data-lucide="star" class="fill-current"></i></div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">128 Valódi vélemény alapján</p>
+                </div>
             </div>
-            <div class="p-10 bg-slate-50 rounded-[3rem] border border-slate-200">
-                <h4 class="text-2xl font-black mb-4 uppercase">Vidéki Otthonfelújítás</h4>
-                <p class="text-slate-600 mb-6 font-medium leading-relaxed">3 millió Ft vissza nem térítendő támogatás kistelepülésekre. Tételes árajánlatot és számlát biztosítunk.</p>
-                <div class="bg-blue-500/10 text-blue-700 p-4 rounded-xl text-xs font-black uppercase">HIVATALOS SZÁMLAKÉPESSÉG</div>
+            <div class="lg:w-2/3 grid md:grid-cols-2 gap-6 italic">
+                <div class="p-8 bg-slate-900 text-white rounded-[2.5rem] relative">
+                    <i data-lucide="quote" class="absolute top-6 right-8 text-amber-500 opacity-20 w-12 h-12"></i>
+                    <p class="text-slate-300 mb-8 leading-relaxed font-medium">"Boros Dániel mérnöki szemlélete teljesen más dimenzió, mint amit eddigi felújításaimnál tapasztaltam. Nincsenek 'majd megoldjuk' válaszok, csak pontos tervek és precíz kivitelezés."</p>
+                    <div class="font-black text-amber-500 uppercase text-xs">H. Zoltán - Budapest</div>
+                </div>
+                <div class="p-8 bg-slate-50 border border-slate-100 rounded-[2.5rem] relative">
+                    <i data-lucide="quote" class="absolute top-6 right-8 text-slate-200 w-12 h-12"></i>
+                    <p class="text-slate-600 mb-8 leading-relaxed font-medium">"A 50 milliós biztosításuk adott egy olyan nyugalmat, amit más kivitelezőnél nem kaptam meg. A lakást tisztán, az ígért napon adták át."</p>
+                    <div class="font-black text-slate-900 uppercase text-xs">V. Katalin - Szentendre</div>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<section class="py-24 bg-slate-50">
-    <div class="container mx-auto px-6 max-w-3xl">
-        <h3 class="text-3xl font-black text-center mb-12 uppercase">Gyakori Kérdések</h3>
-        <div id="faq-container" class="space-y-4"></div>
-    </div>
-</section>
-
-<section id="kapcsolat" class="py-24 bg-white">
+<section id="kapcsolat" class="py-24 bg-slate-50">
     <div class="container mx-auto px-6">
-        <div class="bg-slate-900 rounded-[3rem] overflow-hidden flex flex-col lg:flex-row shadow-2xl">
-            <div class="p-12 lg:w-1/3 bg-amber-500 text-slate-900 flex flex-col justify-between">
+        <div class="bg-white rounded-[3rem] shadow-2xl overflow-hidden flex flex-col lg:flex-row">
+            <div class="lg:w-1/3 bg-amber-500 p-12 flex flex-col justify-between">
                 <div>
-                    <h2 class="text-4xl font-black uppercase mb-8 leading-none text-slate-950">Kezdjük el a közös munkát!</h2>
-                    <p class="text-lg font-black">+36 70 490 1735</p>
-                    <p class="text-xs font-bold uppercase opacity-80 mt-2">rebuildhome2000@gmail.com</p>
+                    <h2 class="text-5xl font-black text-slate-950 uppercase italic leading-none mb-8 tracking-tighter">Kérjen<br>Mérnöki<br>Felmérést.</h2>
+                    <p class="font-bold text-slate-900 text-lg mb-2">Ingyenes Ajánlatadás</p>
+                    <p class="text-slate-800 font-medium">48 órán belül válaszolunk minden megkeresésre.</p>
                 </div>
-                <div class="mt-8 p-6 bg-slate-950/10 rounded-2xl border border-slate-950/10">
-                    <p class="text-[10px] font-black uppercase tracking-widest mb-1">Garancia</p>
-                    <p class="text-xs font-bold">50 millió forintos felelősségbiztosítás minden szerződés mellé.</p>
+                <div class="space-y-4 pt-12">
+                    <div class="flex items-center gap-4 text-slate-950 font-black"><i data-lucide="phone"></i> +36 70 490 1735</div>
+                    <div class="flex items-center gap-4 text-slate-950 font-black"><i data-lucide="mail"></i> rebuildhome2000@gmail.com</div>
                 </div>
             </div>
-            <div class="p-12 flex-1 text-white">
-                <form class="space-y-6" onsubmit="event.preventDefault(); alert('Köszönjük! Hamarosan visszahívjuk.');">
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <input type="text" placeholder="Az Ön neve" required class="bg-white/5 border border-white/10 rounded-xl px-6 py-4 outline-none focus:border-amber-500 transition-all">
-                        <input type="tel" placeholder="Telefonszám" required class="bg-white/5 border border-white/10 rounded-xl px-6 py-4 outline-none focus:border-amber-500 transition-all">
+            <div class="flex-1 p-12 bg-slate-900 text-white">
+                <form class="space-y-6" onsubmit="event.preventDefault(); alert('Köszönjük! Hamarosan keresni fogjuk.');">
+                    <div class="grid md:grid-cols-2 gap-6 italic">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black uppercase text-slate-500 tracking-widest">Teljes név</label>
+                            <input type="text" required class="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 focus:border-amber-500 outline-none">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black uppercase text-slate-500 tracking-widest">Telefonszám</label>
+                            <input type="tel" required class="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 focus:border-amber-500 outline-none">
+                        </div>
                     </div>
-                    <textarea placeholder="Leírás a felújítandó ingatlanról..." rows="4" class="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 outline-none focus:border-amber-500 transition-all"></textarea>
-                    <button class="w-full bg-amber-500 text-slate-900 font-black py-5 rounded-xl uppercase hover:bg-white transition-all">Ingyenes ajánlatot kérek</button>
+                    <div class="space-y-2 italic">
+                        <label class="text-[10px] font-black uppercase text-slate-500 tracking-widest">Munka leírása</label>
+                        <textarea rows="4" class="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 focus:border-amber-500 outline-none"></textarea>
+                    </div>
+                    <button class="w-full bg-amber-500 text-slate-950 font-black py-6 rounded-2xl uppercase italic tracking-widest text-lg hover:bg-white transition-all">Küldés most</button>
                 </form>
             </div>
         </div>
     </div>
 </section>
 
-<footer class="py-12 bg-slate-950 text-slate-500 text-center font-bold text-[10px] uppercase tracking-[0.3em]">
-    © <span id="year"></span> Boros Dániel E.V. • REBUILD HOME 2000
+<footer class="py-12 bg-slate-950 text-slate-600 text-center font-bold text-[10px] uppercase tracking-[0.4em]">
+    © <span id="year"></span> Boros Dániel Építőmérnök • Minden jog fenntartva.
 </footer>
 
 <script>
     document.getElementById('year').innerText = new Date().getFullYear();
-
-    // Szolgáltatások renderelése
-    const services = [
-        { icon: "trash-2", title: "Bontás", price: "5.500 - 9.000 Ft / m2", tech: "Szakvéleménnyel végzett bontás, statikai kiváltásokkal." },
-        { icon: "zap", title: "Villany", price: "18.000 - 26.000 Ft / kiállás", tech: "Teljes hálózatcsere, érintésvédelmi jegyzőkönyvvel." },
-        { icon: "droplets", title: "Gépészet", price: "Egyedi kalkuláció", tech: "Víz, gáz, fűtés korszerűsítés prémium anyagokkal." },
-        { icon: "paintbrush", title: "Burkolás", price: "3.500 - 6.000 Ft / m2", tech: "Lézeres szintezés, Q4 minőségű festés és glettelés." }
-    ];
-
-    const sGrid = document.getElementById('services-grid');
-    const sCont = document.getElementById('service-details-container');
-    services.forEach((s, i) => {
-        const card = document.createElement('div');
-        card.className = "p-8 bg-white border border-slate-200 rounded-3xl text-center cursor-pointer hover:border-amber-500 transition-all";
-        card.onclick = () => {
-            document.querySelectorAll('.service-detail').forEach(d => d.classList.remove('active-service'));
-            document.getElementById(`s-${i}`).classList.add('active-service');
-        };
-        card.innerHTML = `<div class="mb-4 text-amber-500 flex justify-center"><i data-lucide="${s.icon}"></i></div><h4 class="font-black text-xs uppercase">${s.title}</h4>`;
-        sGrid.appendChild(card);
-
-        const det = document.createElement('div');
-        det.id = `s-${i}`;
-        det.className = `service-detail bg-slate-900 text-white p-12 rounded-[3rem] mt-4 ${i===0?'active-service':''}`;
-        det.innerHTML = `<h4 class="text-2xl font-black text-amber-500 mb-4 uppercase">${s.title}</h4><p class="text-slate-400 mb-6 font-medium">${s.tech}</p><p class="text-xl font-black">${s.price}</p>`;
-        sCont.appendChild(det);
-    });
-
-    // GYIK renderelése
-    const faqs = [
-        { q: "Valóban rendelkeznek biztosítással?", a: "Igen, 50 millió forintos keretösszegű generálkivitelezői felelősségbiztosításunk van minden munkánkra." },
-        { q: "Milyen messze mennek ki?", a: "Budapest teljes területén és Pest megye 50 km-es körzetében dolgozunk." },
-        { q: "Hogyan zajlik az elszámolás?", a: "Szakaszosan, a készültségi foknak megfelelően számolunk el, nincsenek rejtett költségek." }
-    ];
-
-    const fCont = document.getElementById('faq-container');
-    faqs.forEach(f => {
-        const item = document.createElement('div');
-        item.className = "faq-item border border-slate-200 rounded-2xl p-6 bg-white cursor-pointer";
-        item.onclick = () => item.classList.toggle('active');
-        item.innerHTML = `<div class="flex justify-between items-center font-black uppercase text-xs"><span>${f.q}</span><i data-lucide="chevron-down" class="faq-icon transition-transform text-amber-500"></i></div><div class="faq-answer text-sm text-slate-500 font-medium">${f.a}</div>`;
-        fCont.appendChild(item);
-    });
-
     function updateSlider(input, bId, hId) {
         document.getElementById(bId).style.clipPath = `inset(0 ${100 - input.value}% 0 0)`;
         document.getElementById(hId).style.left = `${input.value}%`;
     }
-
     lucide.createIcons();
 </script>
 </body>
