@@ -295,46 +295,261 @@
             </div>
         </div>
     </section>
-     
-    <!-- Szolgáltatások -->
-    <section id="szolgaltatasok" class="py-24 px-6 bg-slate-50">
-        <div class="max-w-7xl mx-auto">
-            <h2 class="text-4xl font-black text-center mb-16">Mérnöki <span class="brand-text-orange">Szolgáltatások</span></h2>
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Kártyák -->
-                <div onclick="openService('bontas')" class="promise-card card-white hover:border-amber-500 cursor-pointer text-center group">
-                    <i class="fas fa-hammer text-3xl brand-text-orange mb-4 group-hover:scale-110 transition"></i>
-                    <h3 class="font-bold uppercase text-sm">Bontás & Szállítás</h3>
-                </div>
-                <div onclick="openService('gepeszet')" class="promise-card card-white hover:border-amber-500 cursor-pointer text-center group">
-                    <i class="fas fa-faucet text-3xl brand-text-orange mb-4 group-hover:scale-110 transition"></i>
-                    <h3 class="font-bold uppercase text-sm">Víz-Gáz-Fűtés</h3>
-                </div>
-                <div onclick="openService('villany')" class="promise-card card-white hover:border-amber-500 cursor-pointer text-center group">
-                    <i class="fas fa-bolt text-3xl brand-text-orange mb-4 group-hover:scale-110 transition"></i>
-                    <h3 class="font-bold uppercase text-sm">Villanyszerelés</h3>
-                </div>
-                <div onclick="openService('komuves')" class="promise-card card-white hover:border-amber-500 cursor-pointer text-center group">
-                    <i class="fas fa-trowel-bricks text-3xl brand-text-orange mb-4 group-hover:scale-110 transition"></i>
-                    <h3 class="font-bold uppercase text-sm">Kőműves Munkák</h3>
-                </div>
-                <div onclick="openService('burkolas')" class="promise-card card-white hover:border-amber-500 cursor-pointer text-center group">
-                    <i class="fas fa-th-large text-3xl brand-text-orange mb-4 group-hover:scale-110 transition"></i>
-                    <h3 class="font-bold uppercase text-sm">Burkolás</h3>
-                </div>
-                <div onclick="openService('gipszkarton')" class="promise-card card-white hover:border-amber-500 cursor-pointer text-center group">
-                    <i class="fas fa-vector-square text-3xl brand-text-orange mb-4 group-hover:scale-110 transition"></i>
-                    <h3 class="font-bold uppercase text-sm">Gipszkartonozás</h3>
-                </div>
-                <div onclick="openService('festes')" class="promise-card card-white hover:border-amber-500 cursor-pointer text-center group">
-                    <i class="fas fa-paint-roller text-3xl brand-text-orange mb-4 group-hover:scale-110 transition"></i>
-                    <h3 class="font-bold uppercase text-sm">Festés</h3>
-                </div>
-                <div onclick="openService('takaritas')" class="promise-card card-white hover:border-amber-500 cursor-pointer text-center group">
-                    <i class="fas fa-broom text-3xl brand-text-orange mb-4 group-hover:scale-110 transition"></i>
-                    <h3 class="font-bold uppercase text-sm">Takarítás</h3>
-                </div>
+
+    <!-- Services Section -->
+    <section id="szolgaltatasok" class="py-20 px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="brand-text-orange font-black uppercase tracking-widest text-sm">Transzparens Árazás</span>
+                <h2 class="text-4xl md:text-5xl font-black mt-4 mb-6 uppercase tracking-tighter">Szolgáltatások és <span class="brand-text-orange">Munkadíjak</span></h2>
+                <p class="text-slate-500 text-lg max-w-2xl mx-auto">Mérnöki precizitás és kiszámítható költségek. Az alábbi árak tájékoztató jellegű irányárak.</p>
             </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <!-- 1. Bontás és Elszállítás -->
+                <div class="service-card rounded-3xl shadow-sm hover:shadow-md">
+                    <img src="https://images.unsplash.com/photo-1541913056-568c886dbf85?auto=format&fit=crop&w=800&q=80" alt="Bontás" class="service-image">
+                    <div class="p-8">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-black uppercase tracking-tight">Bontás és Elszállítás</h3>
+                            <div class="w-10 h-10 brand-bg-dark text-white rounded-lg flex items-center justify-center"><i class="fas fa-dumpster"></i></div>
+                        </div>
+                        <p class="text-slate-600 text-sm mb-6">Tervszerű bontás, szelektív hulladékkezeléssel és tiszta munkaterülettel.</p>
+                        
+                        <button onclick="toggleDetails(this)" class="flex items-center gap-2 font-bold text-xs uppercase tracking-widest brand-text-orange hover:text-amber-600 transition">
+                            Árak és Részletek <i class="fas fa-chevron-down rotate-icon"></i>
+                        </button>
+                        
+                        <div class="details-content mt-6 space-y-4 border-t pt-4">
+                            <div class="bg-slate-50 p-4 rounded-xl">
+                                <h4 class="font-bold text-xs uppercase text-slate-400 mb-2 tracking-widest">Irányadó munkadíjak</h4>
+                                <ul class="text-sm space-y-2">
+                                    <li class="flex justify-between"><span>Válaszfal bontás (tégla/Ytong)</span> <span class="font-bold">6.500 Ft-tól / m²</span></li>
+                                    <li class="flex justify-between"><span>Csempe/Járólap felverés</span> <span class="font-bold">3.500 Ft-tól / m²</span></li>
+                                    <li class="flex justify-between"><span>Sittszállítás (lerakóval, rakodással)</span> <span class="font-bold">12.000 Ft-tól / m³</span></li>
+                                </ul>
+                            </div>
+                            <div class="text-sm text-slate-500">
+                                <p><strong>Műszaki tartalom:</strong> Statikai szakvélemény szerinti falbontás, pormentesítés, lift- és folyosóvédelem az egész munka alatt.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Víz, Gáz, Fűtés -->
+                <div class="service-card rounded-3xl shadow-sm hover:shadow-md">
+                    <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80" alt="Gépészet" class="service-image">
+                    <div class="p-8">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-black uppercase tracking-tight">Víz, Gáz, Fűtés</h3>
+                            <div class="w-10 h-10 brand-bg-orange text-dark rounded-lg flex items-center justify-center"><i class="fas fa-tint"></i></div>
+                        </div>
+                        <p class="text-slate-600 text-sm mb-6">Modern épületgépészeti rendszerek kiépítése és korszerűsítése.</p>
+                        
+                        <button onclick="toggleDetails(this)" class="flex items-center gap-2 font-bold text-xs uppercase tracking-widest brand-text-orange hover:text-amber-600 transition">
+                            Árak és Részletek <i class="fas fa-chevron-down rotate-icon"></i>
+                        </button>
+                        
+                        <div class="details-content mt-6 space-y-4 border-t pt-4">
+                            <div class="bg-slate-50 p-4 rounded-xl">
+                                <h4 class="font-bold text-xs uppercase text-slate-400 mb-2 tracking-widest">Irányadó munkadíjak</h4>
+                                <ul class="text-sm space-y-2">
+                                    <li class="flex justify-between"><span>Víz kiállás készítés (hideg-meleg)</span> <span class="font-bold">35.000 Ft-tól / db</span></li>
+                                    <li class="flex justify-between"><span>Szaniter szerelés (csap, WC, kád)</span> <span class="font-bold">25.000 Ft-tól / db</span></li>
+                                    <li class="flex justify-between"><span>Padlófűtés rendszerlemez fektetés</span> <span class="font-bold">4.500 Ft-tól / m²</span></li>
+                                </ul>
+                            </div>
+                            <div class="text-sm text-slate-500">
+                                <p><strong>Műszaki tartalom:</strong> Nyomáspróba minden szerelés után, MEO átadás gázmunkáknál, minőségi ötrétegű vagy réz technológiák.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Villanyszerelés -->
+                <div class="service-card rounded-3xl shadow-sm hover:shadow-md">
+                    <img src="https://images.unsplash.com/photo-1621905252507-b354bcadcabc?auto=format&fit=crop&w=800&q=80" alt="Villany" class="service-image">
+                    <div class="p-8">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-black uppercase tracking-tight">Villanyszerelés</h3>
+                            <div class="w-10 h-10 brand-bg-dark text-white rounded-lg flex items-center justify-center"><i class="fas fa-bolt"></i></div>
+                        </div>
+                        <p class="text-slate-600 text-sm mb-6">Teljes hálózatfelújítás és szabványos biztonságtechnika.</p>
+                        
+                        <button onclick="toggleDetails(this)" class="flex items-center gap-2 font-bold text-xs uppercase tracking-widest brand-text-orange hover:text-amber-600 transition">
+                            Árak és Részletek <i class="fas fa-chevron-down rotate-icon"></i>
+                        </button>
+                        
+                        <div class="details-content mt-6 space-y-4 border-t pt-4">
+                            <div class="bg-slate-50 p-4 rounded-xl">
+                                <h4 class="font-bold text-xs uppercase text-slate-400 mb-2 tracking-widest">Irányadó munkadíjak</h4>
+                                <ul class="text-sm space-y-2">
+                                    <li class="flex justify-between"><span>Elektromos kiállás (dobozolva, vésve)</span> <span class="font-bold">12.500 Ft-tól / db</span></li>
+                                    <li class="flex justify-between"><span>Elosztótábla (FI relé, kismegszakító)</span> <span class="font-bold">65.000 Ft-tól / db</span></li>
+                                    <li class="flex justify-between"><span>Szerelvényezés (kapcsolók, lámpák)</span> <span class="font-bold">3.500 Ft-tól / db</span></li>
+                                </ul>
+                            </div>
+                            <div class="text-sm text-slate-500">
+                                <p><strong>Műszaki tartalom:</strong> Érintésvédelmi jegyzőkönyv, horonymarás porelszívással, okosotthon előkészítés igény szerint.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Kőműves Munkák -->
+                <div class="service-card rounded-3xl shadow-sm hover:shadow-md">
+                    <img src="https://images.unsplash.com/photo-1590385602724-40d1b52f9670?auto=format&fit=crop&w=800&q=80" alt="Kőműves" class="service-image">
+                    <div class="p-8">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-black uppercase tracking-tight">Kőműves Munkák</h3>
+                            <div class="w-10 h-10 brand-bg-orange text-dark rounded-lg flex items-center justify-center"><i class="fas fa-trowel-bricks"></i></div>
+                        </div>
+                        <p class="text-slate-600 text-sm mb-6">Falszerkezetek építése és tökéletes aljzatképzés.</p>
+                        
+                        <button onclick="toggleDetails(this)" class="flex items-center gap-2 font-bold text-xs uppercase tracking-widest brand-text-orange hover:text-amber-600 transition">
+                            Árak és Részletek <i class="fas fa-chevron-down rotate-icon"></i>
+                        </button>
+                        
+                        <div class="details-content mt-6 space-y-4 border-t pt-4">
+                            <div class="bg-slate-50 p-4 rounded-xl">
+                                <h4 class="font-bold text-xs uppercase text-slate-400 mb-2 tracking-widest">Irányadó munkadíjak</h4>
+                                <ul class="text-sm space-y-2">
+                                    <li class="flex justify-between"><span>Válaszfalazás (Ytong 10cm)</span> <span class="font-bold">8.500 Ft-tól / m²</span></li>
+                                    <li class="flex justify-between"><span>Oldalfal vakolás (oldalvezetéssel)</span> <span class="font-bold">5.500 Ft-tól / m²</span></li>
+                                    <li class="flex justify-between"><span>Aljzatkiegyenlítés</span> <span class="font-bold">3.800 Ft-tól / m²</span></li>
+                                </ul>
+                            </div>
+                            <div class="text-sm text-slate-500">
+                                <p><strong>Műszaki tartalom:</strong> Lézeres szintezés, hálózott élek, speciális alapozók használata a tökéletes tapadásért.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Hideg- és Melegburkolás -->
+                <div class="service-card rounded-3xl shadow-sm hover:shadow-md">
+                    <img src="https://images.unsplash.com/photo-1584622781564-1d9876a13d00?auto=format&fit=crop&w=800&q=80" alt="Burkolás" class="service-image">
+                    <div class="p-8">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-black uppercase tracking-tight">Hideg- Melegburkolás</h3>
+                            <div class="w-10 h-10 brand-bg-dark text-white rounded-lg flex items-center justify-center"><i class="fas fa-border-all"></i></div>
+                        </div>
+                        <p class="text-slate-600 text-sm mb-6">Precíziós hidegburkolás és esztétikus parkettázás.</p>
+                        
+                        <button onclick="toggleDetails(this)" class="flex items-center gap-2 font-bold text-xs uppercase tracking-widest brand-text-orange hover:text-amber-600 transition">
+                            Árak és Részletek <i class="fas fa-chevron-down rotate-icon"></i>
+                        </button>
+                        
+                        <div class="details-content mt-6 space-y-4 border-t pt-4">
+                            <div class="bg-slate-50 p-4 rounded-xl">
+                                <h4 class="font-bold text-xs uppercase text-slate-400 mb-2 tracking-widest">Irányadó munkadíjak</h4>
+                                <ul class="text-sm space-y-2">
+                                    <li class="flex justify-between"><span>Hidegburkolás (standard lapok)</span> <span class="font-bold">14.000 Ft-tól / m²</span></li>
+                                    <li class="flex justify-between"><span>Laminált padló fektetés</span> <span class="font-bold">4.500 Ft-tól / m²</span></li>
+                                    <li class="flex justify-between"><span>Folyékony vízszigetelés (sarokerősítve)</span> <span class="font-bold">6.000 Ft-tól / m²</span></li>
+                                </ul>
+                            </div>
+                            <div class="text-sm text-slate-500">
+                                <p><strong>Műszaki tartalom:</strong> Lapszintező rendszer használata, 45 fokos gérvágások, epoxi fuga igény szerint.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. Gipszkarton Szerelés -->
+                <div class="service-card rounded-3xl shadow-sm hover:shadow-md">
+                    <img src="https://images.unsplash.com/photo-1534237710431-e2fc49841651?auto=format&fit=crop&w=800&q=80" alt="Gipszkarton" class="service-image">
+                    <div class="p-8">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-black uppercase tracking-tight">Gipszkarton Szerelés</h3>
+                            <div class="w-10 h-10 brand-bg-orange text-dark rounded-lg flex items-center justify-center"><i class="fas fa-hammer"></i></div>
+                        </div>
+                        <p class="text-slate-600 text-sm mb-6">Modern álmennyezetek és kreatív belső terek vázrendszerrel.</p>
+                        
+                        <button onclick="toggleDetails(this)" class="flex items-center gap-2 font-bold text-xs uppercase tracking-widest brand-text-orange hover:text-amber-600 transition">
+                            Árak és Részletek <i class="fas fa-chevron-down rotate-icon"></i>
+                        </button>
+                        
+                        <div class="details-content mt-6 space-y-4 border-t pt-4">
+                            <div class="bg-slate-50 p-4 rounded-xl">
+                                <h4 class="font-bold text-xs uppercase text-slate-400 mb-2 tracking-widest">Irányadó munkadíjak</h4>
+                                <ul class="text-sm space-y-2">
+                                    <li class="flex justify-between"><span>Gipszkarton válaszfal (váz, szigetelés)</span> <span class="font-bold">9.500 Ft-tól / m²</span></li>
+                                    <li class="flex justify-between"><span>Álmennyezet építés (szimpla váz)</span> <span class="font-bold">8.800 Ft-tól / m²</span></li>
+                                    <li class="flex justify-between"><span>Rejtett világítás dobozolás</span> <span class="font-bold">12.000 Ft-tól / fm</span></li>
+                                </ul>
+                            </div>
+                            <div class="text-sm text-slate-500">
+                                <p><strong>Műszaki tartalom:</strong> Rigips technológia, dupla gipszkartonozás a hanggátlásért, üvegszövetes hézagolás.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. Festés és Glettelés -->
+                <div class="service-card rounded-3xl shadow-sm hover:shadow-md">
+                    <img src="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=800&q=80" alt="Festés" class="service-image">
+                    <div class="p-8">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-black uppercase tracking-tight">Festés és Glettelés</h3>
+                            <div class="w-10 h-10 brand-bg-dark text-white rounded-lg flex items-center justify-center"><i class="fas fa-paint-roller"></i></div>
+                        </div>
+                        <p class="text-slate-600 text-sm mb-6">Tökéletesen sima falfelületek és prémium befejező festés.</p>
+                        
+                        <button onclick="toggleDetails(this)" class="flex items-center gap-2 font-bold text-xs uppercase tracking-widest brand-text-orange hover:text-amber-600 transition">
+                            Árak és Részletek <i class="fas fa-chevron-down rotate-icon"></i>
+                        </button>
+                        
+                        <div class="details-content mt-6 space-y-4 border-t pt-4">
+                            <div class="bg-slate-50 p-4 rounded-xl">
+                                <h4 class="font-bold text-xs uppercase text-slate-400 mb-2 tracking-widest">Irányadó munkadíjak</h4>
+                                <ul class="text-sm space-y-2">
+                                    <li class="flex justify-between"><span>Glettelés (2 rétegben, csiszolva)</span> <span class="font-bold">4.200 Ft-tól / m²</span></li>
+                                    <li class="flex justify-between"><span>Festés (2 rétegben, fehér)</span> <span class="font-bold">2.500 Ft-tól / m²</span></li>
+                                    <li class="flex justify-between"><span>Élvédőzés / Maszkolás</span> <span class="font-bold">900 Ft-tól / fm</span></li>
+                                </ul>
+                            </div>
+                            <div class="text-sm text-slate-500">
+                                <p><strong>Műszaki tartalom:</strong> Q3-Q4 felületi minőség, gépi csiszolás pormentesítéssel, prémium lemosható falfestékek.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 8. Takarítás és Átadás -->
+                <div class="service-card rounded-3xl shadow-sm hover:shadow-md">
+                    <img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=800&q=80" alt="Takarítás" class="service-image">
+                    <div class="p-8">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-black uppercase tracking-tight">Takarítás és Átadás</h3>
+                            <div class="w-10 h-10 brand-bg-orange text-dark rounded-lg flex items-center justify-center"><i class="fas fa-broom"></i></div>
+                        </div>
+                        <p class="text-slate-600 text-sm mb-6">Kulcsrakész befejezés: szakszerű takarítás és mérnöki dokumentáció.</p>
+                        
+                        <button onclick="toggleDetails(this)" class="flex items-center gap-2 font-bold text-xs uppercase tracking-widest brand-text-orange hover:text-amber-600 transition">
+                            Árak és Részletek <i class="fas fa-chevron-down rotate-icon"></i>
+                        </button>
+                        
+                        <div class="details-content mt-6 space-y-4 border-t pt-4">
+                            <div class="bg-slate-50 p-4 rounded-xl">
+                                <h4 class="font-bold text-xs uppercase text-slate-400 mb-2 tracking-widest">Irányadó munkadíjak</h4>
+                                <ul class="text-sm space-y-2">
+                                    <li class="flex justify-between"><span>Nagytakarítás felújítás után</span> <span class="font-bold">1.800 Ft-tól / m²</span></li>
+                                    <li class="flex justify-between"><span>Ablaktakarítás (kerettel együtt)</span> <span class="font-bold">3.500 Ft-tól / db</span></li>
+                                    <li class="flex justify-between"><span>Műszaki átadás-átvétel</span> <span class="font-bold text-xs italic">Díjmentes</span></li>
+                                </ul>
+                            </div>
+                            <div class="text-sm text-slate-500">
+                                <p><strong>Műszaki tartalom:</strong> Ipari ózonos tisztítás igény szerint, padló impregnálás, minden gépészeti egység beüzemelése és bemutatása.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
 
             <!-- Extra Szolgáltatások -->
             <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
