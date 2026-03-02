@@ -1,338 +1,713 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="hu">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REBUILD HOME - Boros Dániel</title>
-    <!-- Tailwind CSS -->
+    <title>REBUILD HOME 2000 - Mérnöki Kivitelezés</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-    <!-- React & ReactDOM -->
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <!-- Babel for JSX -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <!-- Framer Motion -->
-    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+        
         body { font-family: 'Inter', sans-serif; }
-        .cursor-ew-resize { cursor: ew-resize; }
-        .animate-spin-slow { animation: spin 8s linear infinite; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        /* Rejtjük a görgetősávot de funkcionális marad */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #fbbf24; border-radius: 10px; }
+        
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 60px;
+            height: 100vh;
+            background: transparent;
+            cursor: ew-resize;
+        }
+
+        .service-detail {
+            display: none;
+            animation: slide-down 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slide-down {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .active-service {
+            display: block !important;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .trust-badge {
+            transition: all 0.3s ease;
+        }
+        .trust-badge:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.2);
+        }
     </style>
 </head>
-<body>
-    <div id="root"></div>
+<body class="min-h-screen bg-white text-slate-900 selection:bg-amber-100 scroll-smooth overflow-x-hidden">
 
-    <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
-        const { motion, AnimatePresence } = window.Motion;
+    <!-- Floating Trust Bar -->
+    <div class="fixed bottom-24 right-6 z-[100] flex flex-col gap-3">
+        <div class="bg-slate-900 text-white p-3 rounded-2xl shadow-2xl border border-white/10 flex items-center gap-3 backdrop-blur-md">
+            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                <i data-lucide="shield-check" class="w-4 h-4 text-white"></i>
+            </div>
+            <div>
+                <p class="text-[9px] font-black uppercase tracking-widest leading-none mb-1 text-green-400">Biztosítva</p>
+                <p class="text-[10px] font-bold text-slate-400 leading-none">Generál Kivitelezői Garancia</p>
+            </div>
+        </div>
+    </div>
 
-        // Lucide ikon komponens wrapper mivel a CDN verzió másképp működik
-        const Icon = ({ name, size = 24, className = "" }) => {
-            const [svg, setSvg] = useState("");
-            useEffect(() => {
-                if (window.lucide) {
-                    const iconSvg = window.lucide.createIcons();
-                }
-            }, [name]);
-            return <i data-lucide={name} style={{width: size, height: size}} className={className}></i>;
-        };
+    <!-- Floating Call Button -->
+    <a href="tel:+36704901735" class="fixed bottom-6 right-6 z-[100] bg-amber-500 text-slate-900 p-4 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all flex items-center gap-2">
+        <i data-lucide="phone" class="w-5 h-5 animate-pulse"></i>
+        <span class="font-black text-xs pr-1 hidden sm:inline uppercase">Hívás most</span>
+    </a>
 
-        const BeforeAfterSlider = ({ before, after }) => {
-            const [sliderPos, setSliderPos] = useState(50);
-            const containerRef = useRef(null);
+    <!-- Progress bar -->
+    <div id="progress-bar" class="fixed top-0 left-0 h-1 bg-amber-500 z-[110] transition-all duration-100" style="width: 0%"></div>
 
-            const handleMove = (e) => {
-                if (!containerRef.current) return;
-                const rect = containerRef.current.getBoundingClientRect();
-                const clientX = e.pageX || (e.touches && e.touches[0].pageX);
-                const x = clientX - rect.left;
-                const pos = Math.max(0, Math.min(100, (x / rect.width) * 100));
-                setSliderPos(pos);
-            };
+    <!-- Navigáció -->
+    <nav id="navbar" class="fixed w-full z-[90] transition-all duration-300 bg-transparent py-4">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                <svg viewBox="0 0 100 100" fill="none" class="w-10 h-10">
+                    <path class="logo-path-main" d="M20 80V25L50 10L80 25V80" stroke="white" stroke-width="8" stroke-linejoin="round"/>
+                    <path d="M20 45H60C71.0457 45 80 53.9543 80 65V80" stroke="#F59E0B" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle class="logo-circle" cx="20" cy="80" r="5" fill="white" />
+                </svg>
+                <div class="flex flex-col">
+                    <span id="logo-text" class="text-xl font-black tracking-tighter leading-none text-white">REBUILD<span class="text-amber-500">HOME</span></span>
+                    <span id="logo-sub" class="text-[8px] font-bold tracking-[0.3em] text-amber-400">EST. 2000</span>
+                </div>
+            </div>
 
-            return (
-                <div className="flex flex-col gap-4">
-                    <div className="flex justify-between items-center px-4">
-                        <div className="flex items-center gap-2 text-amber-600 font-bold text-xs uppercase tracking-widest animate-pulse">
-                            <Icon name="move-horizontal" size={16} />
-                            <span>Húzza oldalra az összehasonlításhoz</span>
-                        </div>
-                        <div className="flex gap-4">
-                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Előtte</span>
-                            <span className="text-[10px] font-black uppercase tracking-widest text-white">Utána</span>
+            <div class="hidden lg:flex items-center gap-6 font-black text-[10px] uppercase tracking-widest">
+                <a href="#bemutatkozas" class="nav-link text-white transition-colors hover:text-amber-500">Rólunk</a>
+                <a href="#ertekelesek" class="nav-link text-white transition-colors hover:text-amber-500">Vélemények</a>
+                <a href="#szolgaltatasok" class="nav-link text-white transition-colors hover:text-amber-500">Szolgáltatások</a>
+                <a href="#folyamat" class="nav-link text-white transition-colors hover:text-amber-500">Munka menete</a>
+                <a href="#projektek" class="nav-link text-white transition-colors hover:text-amber-500">Referenciák</a>
+                <a href="#kapcsolat" class="bg-amber-500 text-slate-900 px-6 py-3 rounded-xl hover:bg-slate-900 hover:text-white transition-all shadow-lg">AJÁNLAT</a>
+            </div>
+
+            <button class="lg:hidden p-2.5 rounded-xl text-white bg-white/10" onclick="toggleMenu()">
+                <i id="menu-icon" data-lucide="menu"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="fixed inset-0 z-[80] bg-slate-950 flex flex-col items-center justify-center gap-6 transition-transform duration-500 translate-x-full">
+        <a href="#bemutatkozas" onclick="toggleMenu()" class="text-2xl font-black text-white uppercase">Rólunk</a>
+        <a href="#ertekelesek" onclick="toggleMenu()" class="text-2xl font-black text-white uppercase">Vélemények</a>
+        <a href="#szolgaltatasok" onclick="toggleMenu()" class="text-2xl font-black text-white uppercase">Szolgáltatások</a>
+        <a href="#folyamat" onclick="toggleMenu()" class="text-2xl font-black text-white uppercase">Munka menete</a>
+        <a href="#projektek" onclick="toggleMenu()" class="text-2xl font-black text-white uppercase">Referenciák</a>
+        <a href="#kapcsolat" onclick="toggleMenu()" class="text-2xl font-black text-white uppercase">Kapcsolat</a>
+        <a href="tel:+36704901735" class="mt-4 bg-amber-500 text-slate-900 px-8 py-4 rounded-2xl font-black text-xl">+36 70 490 1735</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-[100svh] flex items-center bg-slate-950 pt-20">
+        <div class="absolute inset-0">
+            <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=2000" class="w-full h-full object-cover opacity-40" alt="Ház építés">
+            <div class="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/70 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 to-transparent"></div>
+        </div>
+        <div class="container mx-auto px-6 relative z-10 py-12">
+            <div class="max-w-4xl">
+                <div class="flex flex-wrap gap-3 mb-8">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full backdrop-blur-sm">
+                        <div class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></div>
+                        <span class="text-amber-500 font-bold uppercase tracking-widest text-[8px]">Mérnöki Garancia</span>
+                    </div>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-green-500/10 border border-green-500/20 rounded-full backdrop-blur-sm">
+                        <i data-lucide="shield" class="w-3 h-3 text-green-500"></i>
+                        <span class="text-green-500 font-bold uppercase tracking-widest text-[8px]">Generál felelősségbiztosítás</span>
+                    </div>
+                </div>
+                <h1 class="text-5xl md:text-8xl font-black text-white leading-tight mb-8 tracking-tighter uppercase drop-shadow-2xl">
+                    LAKÁS<br><span class="text-amber-500">FELÚJÍTÁS.</span>
+                </h1>
+                <p class="text-lg md:text-xl text-slate-300 leading-relaxed mb-10 max-w-xl font-medium">
+                    Boros Dániel építőmérnök vezetésével. <span class="text-white font-bold">Kivitelezői biztosítással</span>, szakértelemmel és 50 millió Ft-os fedezettel minden projektre.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 items-center">
+                    <a href="#kapcsolat" class="w-full sm:w-auto bg-amber-500 text-slate-900 font-black px-10 py-5 rounded-2xl flex items-center justify-center gap-2 text-base shadow-xl hover:bg-white transition-all uppercase">
+                        Ajánlatot kérek <i data-lucide="arrow-up-right"></i>
+                    </a>
+                    <div class="flex -space-x-3">
+                        <div class="w-12 h-12 rounded-full border-2 border-slate-900 bg-slate-800 flex items-center justify-center text-[10px] font-bold text-amber-500">200+</div>
+                        <div class="flex flex-col ml-6 justify-center">
+                            <div class="flex gap-1 text-amber-500 mb-0.5">
+                                <i data-lucide="star" class="w-3 h-3 fill-amber-500"></i>
+                                <i data-lucide="star" class="w-3 h-3 fill-amber-500"></i>
+                                <i data-lucide="star" class="w-3 h-3 fill-amber-500"></i>
+                                <i data-lucide="star" class="w-3 h-3 fill-amber-500"></i>
+                                <i data-lucide="star" class="w-3 h-3 fill-amber-500"></i>
+                            </div>
+                            <span class="text-white text-[10px] font-black uppercase tracking-widest">Elégedett Ügyfél</span>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                    <div
-                        ref={containerRef}
-                        className="relative w-full h-[400px] md:h-[550px] overflow-hidden rounded-[2.5rem] cursor-ew-resize select-none shadow-2xl bg-slate-800 group border-4 border-slate-800/50"
-                        onMouseMove={handleMove}
-                        onTouchMove={handleMove}
-                    >
-                        <div className="absolute inset-0">
-                            <img src={after} alt="Utána" className="w-full h-full object-cover" />
-                            <div className="absolute top-6 right-6 bg-slate-900/80 backdrop-blur-md text-white px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest z-30 border border-white/10">Utána</div>
+    <!-- Tanúsítványok & Díjak -->
+    <section id="tanusitvanyok" class="py-16 bg-white border-b border-slate-100">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <p class="text-xs font-black text-slate-400 uppercase tracking-[0.3em] mb-4">Szakmai elismeréseink és garanciáink</p>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
+                <div class="trust-badge flex flex-col items-center text-center p-4">
+                    <div class="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mb-4 text-amber-500">
+                        <i data-lucide="award" class="w-8 h-8"></i>
+                    </div>
+                    <p class="text-[10px] font-black uppercase tracking-tighter mb-1">Az Év Kivitelezője</p>
+                    <p class="text-[9px] text-slate-400 font-bold uppercase">2023-as jelölés</p>
+                </div>
+                <div class="trust-badge flex flex-col items-center text-center p-4">
+                    <div class="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mb-4 text-amber-500">
+                        <i data-lucide="shield-check" class="w-8 h-8"></i>
+                    </div>
+                    <p class="text-[10px] font-black uppercase tracking-tighter mb-1">Kivitelezői Biztosítás</p>
+                    <p class="text-[9px] text-slate-400 font-bold uppercase">Minden projektre</p>
+                </div>
+                <div class="trust-badge flex flex-col items-center text-center p-4">
+                    <div class="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mb-4 text-amber-500">
+                        <i data-lucide="check-square" class="w-8 h-8"></i>
+                    </div>
+                    <p class="text-[10px] font-black uppercase tracking-tighter mb-1">Mérnöki Kamara</p>
+                    <p class="text-[9px] text-slate-400 font-bold uppercase">Bejegyzett tag</p>
+                </div>
+                <div class="trust-badge flex flex-col items-center text-center p-4">
+                    <div class="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mb-4 text-amber-500">
+                        <i data-lucide="medal" class="w-8 h-8"></i>
+                    </div>
+                    <p class="text-[10px] font-black uppercase tracking-tighter mb-1">Prémium Minőség</p>
+                    <p class="text-[9px] text-slate-400 font-bold uppercase">A++ Anyagok</p>
+                </div>
+                <div class="trust-badge flex flex-col items-center text-center p-4 col-span-2 md:col-span-1">
+                    <div class="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mb-4 text-amber-500">
+                        <i data-lucide="thumbs-up" class="w-8 h-8"></i>
+                    </div>
+                    <p class="text-[10px] font-black uppercase tracking-tighter mb-1">Megbízható Cég</p>
+                    <p class="text-[9px] text-slate-400 font-bold uppercase">Független Audit</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ÚJ: Részletes Biztosítás Info -->
+    <section class="py-12 bg-green-50">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-8 bg-white p-8 rounded-[2rem] border border-green-100 shadow-sm">
+                <div class="flex gap-6 items-center">
+                    <div class="w-20 h-20 bg-green-500 text-white rounded-2xl flex items-center justify-center shrink-0 shadow-lg shadow-green-200">
+                        <i data-lucide="shield-check" class="w-10 h-10"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-2xl font-black uppercase tracking-tight text-slate-900">Teljes Körű Kivitelezői Biztosítás</h4>
+                        <p class="text-slate-600 font-medium">Ön és ingatlanja 100% biztonságban van. Cégünk 50.000.000 Ft-os szakmai felelősségbiztosítással rendelkezik minden egyes munkálatra.</p>
+                    </div>
+                </div>
+                <div class="shrink-0">
+                    <span class="px-6 py-3 bg-green-100 text-green-700 font-black uppercase text-xs rounded-xl border border-green-200">Aktív Garancia 2024</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bemutatkozás -->
+    <section id="bemutatkozas" class="py-24 bg-white overflow-hidden">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col lg:flex-row gap-16 items-center">
+                <div class="lg:w-1/2 relative">
+                    <div class="absolute -top-10 -left-10 w-40 h-40 bg-amber-500/10 rounded-full blur-3xl"></div>
+                    <div class="relative z-10 border-l-8 border-amber-500 pl-8">
+                        <h2 class="text-amber-600 font-black tracking-widest text-[10px] uppercase mb-2">Bemutatkozás</h2>
+                        <h3 class="text-4xl md:text-6xl font-black text-slate-900 tracking-tighter uppercase leading-[0.9] mb-8">TÖBB MINT 20 ÉVE<br>A MINŐSÉG SZOLGÁLATÁBAN.</h3>
+                        <div class="space-y-6 text-slate-600 leading-relaxed font-medium">
+                            <p class="text-lg font-bold text-slate-900 italic">Boros Dániel vagyok, építőmérnök és a Rebuild Home 2000 alapítója.</p>
+                            <p>Mérnöki diplomámmal és két évtizedes szakmai múltammal garantálom, hogy felújítása mentes lesz a tipikus építőipari anomáliáktól. Csapatunk minden tagja rendelkezik a szükséges szakmai bizonyítványokkal, munkavégzésünket pedig <span class="text-slate-900 font-bold underline decoration-amber-500">teljes körű felelősségbiztosítás</span> védi, így Ön maximális biztonságban érezheti ingatlanát.</p>
                         </div>
-
-                        <div className="absolute inset-0 z-10" style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}>
-                            <img src={before} alt="Előtte" className="w-full h-full object-cover grayscale-[0.2]" />
-                            <div className="absolute top-6 left-6 bg-amber-500 text-slate-900 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest z-30 shadow-lg">Előtte</div>
-                        </div>
-
-                        <div className="absolute top-0 bottom-0 w-1 bg-white shadow-[0_0_20px_rgba(0,0,0,0.5)] z-20" style={{ left: `${sliderPos}%` }}>
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-2xl border-4 border-slate-900/5 transition-transform group-hover:scale-110">
-                                <Icon name="chevron-left" size={16} className="text-amber-500" />
-                                <Icon name="chevron-right" size={16} className="text-amber-500" />
+                        <div class="mt-10 grid grid-cols-2 gap-6">
+                            <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100">
+                                <i data-lucide="award" class="text-amber-500 mb-2"></i>
+                                <p class="text-xs font-black uppercase tracking-widest mb-1">Mérnöki diploma</p>
+                                <p class="text-[10px] text-slate-500">Budapesti Műszaki Egyetem</p>
+                            </div>
+                            <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100">
+                                <i data-lucide="verified" class="text-amber-500 mb-2"></i>
+                                <p class="text-xs font-black uppercase tracking-widest mb-1">Regisztrált vállalkozó</p>
+                                <p class="text-[10px] text-slate-500">MKIK regisztrációval</p>
                             </div>
                         </div>
                     </div>
                 </div>
-            );
-        };
-
-        const App = () => {
-            const [selectedService, setSelectedService] = useState(null);
-            const [showChat, setShowChat] = useState(false);
-            const [isScrolled, setIsScrolled] = useState(false);
-            const [chatMessages, setChatMessages] = useState([
-                { id: 1, text: "Szia! Boros Dániel vagyok. Miben segíthetek a felújítással kapcsolatban?", sender: 'bot' }
-            ]);
-            const [userInput, setUserInput] = useState('');
-            const [isTyping, setIsTyping] = useState(false);
-            const scrollRef = useRef(null);
-
-            useEffect(() => {
-                const handleScroll = () => setIsScrolled(window.scrollY > 50);
-                window.addEventListener('scroll', handleScroll);
-                lucide.createIcons();
-                return () => window.removeEventListener('scroll', handleScroll);
-            }, []);
-
-            useEffect(() => {
-                if (scrollRef.current) {
-                    scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-                }
-                lucide.createIcons();
-            }, [chatMessages, isTyping, showChat, selectedService]);
-
-            const userData = {
-                brandName: "REBUILD",
-                brandSuffix: "HOME",
-                fullName: "Boros Dániel",
-                title: "Generálkivitelező & Építőmérnök",
-                phone: "+36 70 490 1735",
-                email: "rebuildhome2000@gmail.com",
-                address: "Budapest és 100 km-es vonzáskörzetében",
-                profileImage: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=400"
-            };
-
-            const services = [
-                { id: 1, icon: "hammer", title: "Generálkivitelezés", shortDesc: "A tervezéstől a kulcsátadásig minden folyamatot egy kézben tartunk.", fullDesc: "Komplett lakás és házfelújítás mérnöki szemlélettel. Levesszük a válláról a szervezés terhét.", priceInfo: "Egyedi árazás", unit: "Projekt", details: ["Mérnöki tanácsadás", "Szerződött határidők", "Garancia"], images: ["https://images.unsplash.com/photo-1503387762-592dea58ef21?q=80&w=800"] },
-                { id: 2, icon: "layout", title: "Hideg- melegburkolás", shortDesc: "Precíz burkolás nagyformátumú lapokkal is.", fullDesc: "Professzionális hidegburkolás vizesblokkokba, teraszokra. Különös figyelmet fordítunk a vízszigetelésre.", priceInfo: "9.500 Ft-tól", unit: "m²", details: ["Gérvágás", "Lapszintező", "Vízszigetelés"], images: ["https://images.unsplash.com/photo-1584622781564-1d9876a13d00?q=80&w=800"] },
-                { id: 3, icon: "paintbrush", title: "Festés és Glettelés", shortDesc: "Tökéletes falak, minőségi anyagok, Q4 minőség.", fullDesc: "Falfelületek előkészítése gépi csiszolással, pormentesen. Q3-Q4 glettelés.", priceInfo: "3.200 Ft-tól", unit: "m²", details: ["Gépi csiszolás", "Élvédőzés", "Prémium festékek"], images: ["https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=800"] }
-            ];
-
-            const handleSendMessage = async (e) => {
-                e.preventDefault();
-                if (!userInput.trim()) return;
-                const newMsg = { id: Date.now(), text: userInput, sender: 'user' };
-                setChatMessages(prev => [...prev, newMsg]);
-                setUserInput('');
-                setIsTyping(true);
-                
-                // Szimulált válasz (mivel az API kulcs üres)
-                setTimeout(() => {
-                    setChatMessages(prev => [...prev, { id: Date.now()+1, text: "Köszönöm az érdeklődést! Mérnökként azt javaslom, beszéljük meg a részleteket telefonon: " + userData.phone, sender: 'bot' }]);
-                    setIsTyping(false);
-                }, 1500);
-            };
-
-            const scrollTo = (id) => {
-                const el = document.getElementById(id);
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-            };
-
-            return (
-                <div className="min-h-screen bg-white text-slate-900 selection:bg-amber-100 overflow-x-hidden">
-                    
-                    {/* Chat */}
-                    <div className="fixed bottom-6 right-6 z-[150] flex flex-col items-end gap-4">
-                        <AnimatePresence>
-                            {showChat && (
-                                <motion.div initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} className="bg-white rounded-[2rem] shadow-2xl border border-slate-100 mb-2 w-[320px] md:w-[380px] h-[500px] flex flex-col overflow-hidden">
-                                    <div className="bg-slate-950 p-5 text-white flex items-center justify-between">
-                                        <div className="flex items-center gap-3">
-                                            <img src={userData.profileImage} className="w-10 h-10 rounded-xl object-cover border border-amber-500" />
-                                            <div><p className="font-bold text-sm">{userData.fullName}</p><p className="text-[10px] text-amber-500 uppercase">Online</p></div>
-                                        </div>
-                                        <button onClick={() => setShowChat(false)}><Icon name="x" size={20} /></button>
-                                    </div>
-                                    <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50">
-                                        {chatMessages.map(m => (
-                                            <div key={m.id} className={`flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                                <div className={`max-w-[80%] p-3 rounded-2xl text-sm ${m.sender === 'user' ? 'bg-amber-500 text-slate-900' : 'bg-white border border-slate-200 text-slate-700'}`}>{m.text}</div>
-                                            </div>
-                                        ))}
-                                        {isTyping && <div className="text-xs text-slate-400 animate-pulse tracking-widest">Dániel gépel...</div>}
-                                    </div>
-                                    <form onSubmit={handleSendMessage} className="p-3 bg-white border-t flex gap-2">
-                                        <input value={userInput} onChange={e => setUserInput(e.target.value)} placeholder="Üzenet..." className="flex-1 bg-slate-100 rounded-xl px-4 py-2 text-sm outline-none focus:ring-1 focus:ring-amber-500" />
-                                        <button className="bg-slate-950 text-white p-2 rounded-xl"><Icon name="send" size={18} /></button>
-                                    </form>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-                        <button onClick={() => setShowChat(!showChat)} className="w-16 h-16 bg-slate-950 text-white rounded-2xl shadow-2xl flex items-center justify-center hover:bg-amber-500 transition-all">
-                            <Icon name={showChat ? "x" : "message-circle"} size={28} />
-                        </button>
+                <div class="lg:w-1/2 relative group">
+                    <img src="https://images.unsplash.com/photo-1541913053965-0348903e8cc5?auto=format&fit=crop&q=80&w=1200" class="rounded-[3rem] shadow-2xl transition-transform duration-700 group-hover:scale-[1.02]" alt="Mérnök munka közben">
+                    <div class="absolute -bottom-6 -right-6 bg-slate-900 text-white p-8 rounded-3xl shadow-2xl max-w-xs">
+                        <p class="text-amber-500 font-black text-4xl mb-2">24+</p>
+                        <p class="text-[10px] font-bold uppercase tracking-widest leading-relaxed">Sikeresen lezárt évtized a magyar építőiparban.</p>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                    {/* Nav */}
-                    <nav className={`fixed top-0 w-full z-[140] transition-all ${isScrolled ? 'bg-white/90 backdrop-blur-md py-3 shadow-md' : 'py-6'}`}>
-                        <div className="container mx-auto px-6 flex justify-between items-center">
-                            <div className="flex items-center gap-2 font-black text-xl tracking-tighter">
-                                <Icon name="hammer" size={24} className="text-amber-500" />
-                                {userData.brandName}<span className="text-amber-500">{userData.brandSuffix}</span>
-                            </div>
-                            <div className="hidden md:flex gap-8 text-[10px] font-black uppercase tracking-widest text-slate-500">
-                                <button onClick={() => scrollTo('services')}>Szolgáltatások</button>
-                                <button onClick={() => scrollTo('contact')}>Kapcsolat</button>
-                            </div>
-                            <a href={`tel:${userData.phone}`} className="bg-slate-950 text-white px-5 py-2 rounded-xl text-xs font-bold flex items-center gap-2">
-                                <Icon name="phone" size={14} className="text-amber-500" /> Hívás
-                            </a>
+    <!-- Értékelések Szekció -->
+    <section id="ertekelesek" class="py-24 bg-slate-950 text-white overflow-hidden">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-amber-500 font-black tracking-widest text-[10px] uppercase mb-2">Vélemények</h2>
+                <h3 class="text-4xl md:text-6xl font-black tracking-tighter uppercase mb-4">ÜGYFELEINK MONDTÁK.</h3>
+                <div class="flex justify-center items-center gap-4">
+                    <div class="flex text-amber-500">
+                        <i data-lucide="star" class="fill-current"></i>
+                        <i data-lucide="star" class="fill-current"></i>
+                        <i data-lucide="star" class="fill-current"></i>
+                        <i data-lucide="star" class="fill-current"></i>
+                        <i data-lucide="star" class="fill-current"></i>
+                    </div>
+                    <span class="text-2xl font-black">4.9 / 5</span>
+                    <span class="text-slate-500 font-bold uppercase text-[10px] tracking-widest">200+ Hitelesített vélemény</span>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8" id="testimonials-grid">
+                <!-- Dinamikus vélemények -->
+                <div class="bg-white/5 p-8 rounded-3xl border border-white/10 relative">
+                    <i data-lucide="quote" class="absolute top-6 right-6 text-amber-500/20 w-12 h-12"></i>
+                    <p class="text-slate-300 italic mb-6 leading-relaxed">"Boros Dániel mérnöki precizitása lenyűgöző. Végre egy kivitelező, aki nem csak ígérget, hanem tartja a határidőt és a költségvetést is."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center font-bold text-slate-900">H.Z.</div>
+                        <div>
+                            <p class="font-black uppercase text-xs tracking-widest">Horváth Zoltán</p>
+                            <p class="text-[10px] text-slate-500">Generálfelújítás (Budapest)</p>
                         </div>
-                    </nav>
-
-                    {/* Hero */}
-                    <section className="pt-32 pb-20 px-6">
-                        <div className="container mx-auto grid lg:grid-cols-2 gap-12 items-center">
-                            <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}>
-                                <h1 className="text-6xl md:text-8xl font-black leading-[0.9] tracking-tighter mb-8 text-slate-950">
-                                    A házad, <br/> <span className="text-amber-500 italic">újjászületve.</span>
-                                </h1>
-                                <p className="text-slate-500 text-lg mb-10 max-w-md">Mérnöki precizitás, fix határidők és teljeskörű generálkivitelezés Budapest környékén.</p>
-                                <div className="flex gap-4">
-                                    <button onClick={() => scrollTo('services')} className="bg-slate-950 text-white px-8 py-4 rounded-2xl font-bold flex items-center gap-3 hover:bg-amber-600 transition-all shadow-xl">Ajánlatkérés <Icon name="arrow-right" size={18}/></button>
-                                </div>
-                            </motion.div>
-                            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="relative">
-                                <img src="https://images.unsplash.com/photo-1600607687940-4e524cb350b1?q=80&w=1200" className="rounded-[3rem] shadow-2xl border-8 border-white" />
-                                <div className="absolute -bottom-6 -right-6 bg-amber-500 p-8 rounded-[2rem] shadow-xl rotate-6 text-slate-950 font-black uppercase text-xs">Mérnöki<br/>Garancia</div>
-                            </motion.div>
+                    </div>
+                </div>
+                <div class="bg-white/5 p-8 rounded-3xl border border-white/10 relative">
+                    <i data-lucide="quote" class="absolute top-6 right-6 text-amber-500/20 w-12 h-12"></i>
+                    <p class="text-slate-300 italic mb-6 leading-relaxed">"Nagyon féltünk a felújítástól, de a Rebuild Home csapata levette a terhet a vállunkról. A kivitelezői biztosítás külön megnyugvást adott."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center font-bold text-white">V.K.</div>
+                        <div>
+                            <p class="font-black uppercase text-xs tracking-widest">Varga Katalin</p>
+                            <p class="text-[10px] text-slate-500">Fürdőszoba rekonstrukció</p>
                         </div>
-                    </section>
-
-                    {/* Services */}
-                    <section id="services" className="py-20 bg-slate-50">
-                        <div className="container mx-auto px-6">
-                            <h2 className="text-4xl font-black mb-12 tracking-tighter">Szolgáltatások</h2>
-                            <div className="grid md:grid-cols-3 gap-8">
-                                {services.map(s => (
-                                    <div key={s.id} onClick={() => setSelectedService(s)} className="bg-white p-8 rounded-[2.5rem] shadow-sm hover:shadow-xl transition-all cursor-pointer group border border-slate-100">
-                                        <div className="bg-amber-500 text-white w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-                                            <Icon name={s.icon} size={28} />
-                                        </div>
-                                        <h3 className="text-xl font-bold mb-4">{s.title}</h3>
-                                        <p className="text-slate-500 text-sm leading-relaxed mb-6">{s.shortDesc}</p>
-                                        <div className="pt-4 border-t flex justify-between items-center">
-                                            <span className="font-bold text-slate-900">{s.priceInfo}</span>
-                                            <Icon name="chevron-right" size={20} className="text-amber-500" />
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
+                    </div>
+                </div>
+                <div class="bg-white/5 p-8 rounded-3xl border border-white/10 relative">
+                    <i data-lucide="quote" class="absolute top-6 right-6 text-amber-500/20 w-12 h-12"></i>
+                    <p class="text-slate-300 italic mb-6 leading-relaxed">"Tiszta munkavégzés, kulturált szakemberek. Két év garanciát kaptunk, de azóta sincs semmi gondunk a lakással."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center font-bold text-white">S.P.</div>
+                        <div>
+                            <p class="font-black uppercase text-xs tracking-widest">Sándor Péter</p>
+                            <p class="text-[10px] text-slate-500">Teljes gépészeti csere</p>
                         </div>
-                    </section>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-12">
+                <button class="text-amber-500 font-black uppercase text-[10px] tracking-[0.3em] hover:text-white transition-colors">További értékelések megtekintése <i data-lucide="arrow-right" class="inline w-3 h-3 ml-2"></i></button>
+            </div>
+        </div>
+    </section>
 
-                    {/* Before After Example */}
-                    <section className="py-20 bg-slate-950 text-white overflow-hidden">
-                        <div className="container mx-auto px-6">
-                            <div className="grid lg:grid-cols-2 gap-12 items-center">
-                                <BeforeAfterSlider 
-                                    before="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1200" 
-                                    after="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=1200" 
-                                />
-                                <div>
-                                    <h3 className="text-amber-500 font-black uppercase text-xs tracking-widest mb-4 underline decoration-2 underline-offset-8">Referencia</h3>
-                                    <h2 className="text-5xl font-black tracking-tighter mb-8">Modern Fürdőszoba</h2>
-                                    <p className="text-slate-400 mb-8 leading-relaxed">Egy elavult panellakás fürdőszobájának teljes megújulása. Beépítettük a Geberit tartályt, 60x120-as lapokkal burkoltunk és épített zuhanyzót alakítottunk ki.</p>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="bg-white/5 p-4 rounded-2xl border border-white/10"><p className="text-[10px] text-amber-500 uppercase font-black">Idő</p><p className="font-bold">12 nap</p></div>
-                                        <div className="bg-white/5 p-4 rounded-2xl border border-white/10"><p className="text-[10px] text-amber-500 uppercase font-black">Garancia</p><p className="font-bold">5 év</p></div>
-                                    </div>
-                                </div>
-                            </div>
+    <!-- Szolgáltatások -->
+    <section id="szolgaltatasok" class="py-24 bg-slate-50 relative">
+        <div class="container mx-auto px-6">
+            <div class="mb-16">
+                <h2 class="text-amber-600 font-black tracking-widest text-[10px] uppercase mb-2">Generálkivitelezés</h2>
+                <h3 class="text-4xl md:text-6xl font-black text-slate-900 tracking-tighter uppercase mb-6">SZOLGÁLTATÁSAINK & ÁRAK.</h3>
+                <p class="text-slate-500 max-w-2xl text-base font-medium">Minden munkánkat <span class="text-slate-900 font-bold">mérnöki művezetés</span> mellett végezzük, szigorú technológiai sorrendben. Az árak irányadóak.</p>
+            </div>
+
+            <div id="services-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+                <!-- Services injected by JS -->
+            </div>
+
+            <div id="service-details-container">
+                <!-- Details injected here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Munka menete -->
+    <section id="folyamat" class="py-24 bg-slate-950 text-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-20">
+                <h2 class="text-amber-500 font-black tracking-widest text-[10px] uppercase mb-2">Folyamat</h2>
+                <h3 class="text-4xl md:text-6xl font-black tracking-tighter uppercase">HOGYAN DOLGOZUNK?</h3>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="p-8 bg-white/5 rounded-3xl border border-white/10 hover:border-amber-500 transition-all">
+                    <div class="text-5xl font-black text-amber-500/20 mb-4">01</div>
+                    <h4 class="text-xl font-black uppercase mb-4 tracking-tighter text-amber-500">Helyszíni Felmérés</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed font-medium text-justify">Lézeres méréssel és mérnöki szemrevételezéssel feltérképezzük az ingatlan állapotát, statikai adottságait és a hálózatokat.</p>
+                </div>
+                <div class="p-8 bg-white/5 rounded-3xl border border-white/10 hover:border-amber-500 transition-all">
+                    <div class="text-5xl font-black text-amber-500/20 mb-4">02</div>
+                    <h4 class="text-xl font-black uppercase mb-4 tracking-tighter text-amber-500">Tételes Árajánlat</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed font-medium text-justify">Részletes, szakaszokra bontott ajánlatot adunk, ahol minden csavar és munkaóra pontosan nyomon követhető.</p>
+                </div>
+                <div class="p-8 bg-white/5 rounded-3xl border border-white/10 hover:border-amber-500 transition-all">
+                    <div class="text-5xl font-black text-amber-500/20 mb-4">03</div>
+                    <h4 class="text-xl font-black uppercase mb-4 tracking-tighter text-amber-500">Garanciális Kivitelezés</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed font-medium text-justify">E-napló vezetésével, folyamatos fotódokumentációval és technológiai szünetek betartásával építünk.</p>
+                </div>
+                <div class="p-8 bg-white/5 rounded-3xl border border-white/10 hover:border-amber-500 transition-all">
+                    <div class="text-5xl font-black text-amber-500/20 mb-4">04</div>
+                    <h4 class="text-xl font-black uppercase mb-4 tracking-tighter text-amber-500">Szakaszos Átadás</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed font-medium text-justify">Minden munkafázist ellenőrzünk, a végén pedig jegyzőkönyvvel és garanciajeggyel zárjuk a projektet.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Referenciák -->
+    <section id="projektek" class="py-24 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="mb-16 text-center">
+                <h2 class="text-amber-600 font-black tracking-widest text-[10px] uppercase mb-2">Referenciák</h2>
+                <h3 class="text-4xl md:text-6xl font-black text-slate-900 tracking-tighter uppercase">EREDMÉNYEINK.</h3>
+            </div>
+            <div id="projects-container" class="space-y-32">
+                <!-- Projects injected by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- GYIK -->
+    <section class="py-24 bg-slate-50">
+        <div class="container mx-auto px-6 max-w-3xl">
+            <div class="text-center mb-16">
+                <h2 class="text-amber-600 font-black tracking-widest text-[10px] uppercase mb-2">GYIK</h2>
+                <h3 class="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase">VÁLASZOK A KÉRDÉSEIRE.</h3>
+            </div>
+            <div class="space-y-4" id="faq-container">
+                <!-- FAQ Items will be injected -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Kapcsolat -->
+    <section id="kapcsolat" class="py-24 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col lg:flex-row bg-slate-900 rounded-[3rem] overflow-hidden shadow-2xl">
+                <div class="p-12 lg:w-1/3 bg-amber-500 flex flex-col justify-between">
+                    <div>
+                        <h2 class="text-4xl md:text-6xl font-black text-slate-900 uppercase leading-[0.9] mb-8 tracking-tighter">Kezdjük el<br>a munkát.</h2>
+                        <div class="bg-slate-900/10 p-4 rounded-xl mb-8">
+                            <p class="text-slate-900 font-bold leading-tight flex items-center gap-2">
+                                <i data-lucide="shield-check" class="w-5 h-5 shrink-0"></i>
+                                Minden szerződésünk mellé csatoljuk a szakmai felelősségbiztosításunk igazolását.
+                            </p>
                         </div>
-                    </section>
-
-                    {/* Modal */}
-                    <AnimatePresence>
-                        {selectedService && (
-                            <motion.div initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} className="fixed inset-0 z-[200] bg-slate-950/90 flex items-center justify-center p-4 backdrop-blur-sm">
-                                <motion.div initial={{scale:0.9, y:20}} animate={{scale:1, y:0}} className="bg-white rounded-[2.5rem] w-full max-w-2xl overflow-hidden relative shadow-2xl">
-                                    <img src={selectedService.images[0]} className="w-full h-48 object-cover" />
-                                    <button onClick={()=>setSelectedService(null)} className="absolute top-4 right-4 bg-white/20 backdrop-blur-md p-2 rounded-full text-white"><Icon name="x" size={20}/></button>
-                                    <div className="p-8">
-                                        <h2 className="text-3xl font-black mb-4">{selectedService.title}</h2>
-                                        <p className="text-slate-600 mb-8 leading-relaxed font-medium">{selectedService.fullDesc}</p>
-                                        <div className="bg-slate-50 p-6 rounded-2xl mb-8">
-                                            <p className="text-xs uppercase font-black text-slate-400 mb-2">Amit garantálunk</p>
-                                            <ul className="space-y-2">
-                                                {selectedService.details.map((d,i)=>(
-                                                    <li key={i} className="flex items-center gap-2 text-sm font-bold"><Icon name="check-circle" size={16} className="text-green-500"/> {d}</li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                        <button onClick={()=>{setSelectedService(null); setShowChat(true)}} className="w-full bg-slate-950 text-white py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-amber-500 transition-colors shadow-lg">Egyedi Árajánlat Kérése</button>
-                                    </div>
-                                </motion.div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-
-                    {/* Footer */}
-                    <footer id="contact" className="py-20 px-6 border-t mt-20">
-                        <div className="container mx-auto grid md:grid-cols-2 gap-16">
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="phone" class="text-slate-900"></i>
+                            <a href="tel:+36704901735" class="text-2xl font-black text-slate-900">+36 70 490 1735</a>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="mail" class="text-slate-900"></i>
+                            <a href="mailto:rebuildhome2000@gmail.com" class="text-xs font-bold text-slate-900">rebuildhome2000@gmail.com</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-8 md:p-16 flex-1">
+                    <form class="space-y-6" onsubmit="event.preventDefault(); alert('Üzenet elküldve! Hamarosan keresni fogjuk.');">
+                        <div class="grid md:grid-cols-2 gap-6">
                             <div>
-                                <h2 className="text-5xl font-black tracking-tighter mb-8">Indítsuk el a <br/><span className="text-amber-500">felújítást!</span></h2>
-                                <div className="space-y-6">
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center"><Icon name="phone" size={20}/></div>
-                                        <div><p className="text-[10px] text-slate-400 font-bold uppercase">Telefonszám</p><p className="font-bold text-lg">{userData.phone}</p></div>
-                                    </div>
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center"><Icon name="mail" size={20}/></div>
-                                        <div><p className="text-[10px] text-slate-400 font-bold uppercase">Email</p><p className="font-bold text-lg">{userData.email}</p></div>
-                                    </div>
-                                </div>
+                                <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 block">Teljes Név</label>
+                                <input type="text" required class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:border-amber-500 focus:outline-none">
                             </div>
-                            <div className="bg-slate-50 p-8 rounded-[3rem] border border-slate-200">
-                                <form className="space-y-4">
-                                    <input className="w-full p-4 rounded-2xl border border-slate-200 outline-none focus:ring-1 focus:ring-amber-500" placeholder="Név" />
-                                    <input className="w-full p-4 rounded-2xl border border-slate-200 outline-none focus:ring-1 focus:ring-amber-500" placeholder="Telefonszám" />
-                                    <textarea className="w-full p-4 rounded-2xl border border-slate-200 h-32 outline-none focus:ring-1 focus:ring-amber-500" placeholder="Miben segíthetek?"></textarea>
-                                    <button className="w-full bg-slate-950 text-white py-4 rounded-2xl font-black uppercase shadow-xl hover:bg-amber-600 transition-colors">Ingyenes Visszahívás Kérése</button>
-                                </form>
+                            <div>
+                                <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 block">Telefonszám</label>
+                                <input type="tel" required class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:border-amber-500 focus:outline-none">
                             </div>
                         </div>
-                    </footer>
+                        <div>
+                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 block">Ingatlan helyszíne és típusa</label>
+                            <input type="text" placeholder="Pl: Budapest XI., 65m2 panel" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:border-amber-500 focus:outline-none">
+                        </div>
+                        <button class="w-full bg-amber-500 text-slate-900 font-black py-6 rounded-2xl hover:bg-white transition-all uppercase tracking-widest text-sm shadow-xl">
+                            Ingyenes árajánlatot kérek
+                        </button>
+                    </form>
                 </div>
-            );
-        };
+            </div>
+        </div>
+    </section>
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+    <footer class="bg-slate-950 text-white py-20">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-amber-500 font-black text-2xl mb-4 tracking-tighter">REBUILD HOME 2000</p>
+            <p class="text-xs text-slate-500 uppercase tracking-widest">Építőmérnöki szemlélet • Szakmai Garancia • Kivitelezői Biztosítás</p>
+            <div class="mt-12 pt-8 border-t border-white/5 text-[10px] text-slate-600 font-bold uppercase tracking-widest">
+                © <span id="year"></span> Boros Dániel E.V. • Minden jog fenntartva.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Kibővített Szolgáltatás Adatok
+        const services = [
+            { 
+                icon: "trash-2", 
+                title: "Szakszerű Bontás", 
+                desc: "Tiszta, biztonságos bontás mérnöki felügyelettel.", 
+                tech: "Válaszfalak, aljzatbeton, régi gépészet és nyílászárók szakszerű bontása. Statikai kiváltások acélgerendával, törmelék elszállítása hivatalos lerakóba. Ügyelünk a szomszédokra és a tisztaságra.",
+                details: [
+                    "Sittszállítás konténerrel",
+                    "Statikai szakvélemény biztosítása",
+                    "Vizesvágás pormentesítéssel",
+                    "Lift és közös területek védelme"
+                ],
+                price: "5.500 - 9.000 Ft / m2",
+                example: "Egy 50m2-es lakás teljes bontása sittel együtt: kb. 450-650.000 Ft"
+            },
+            { 
+                icon: "zap", 
+                title: "Villanyszerelés", 
+                desc: "Modern, biztonságos elektromos hálózat tervezése.", 
+                tech: "Teljes hálózatcsere, mért fővezeték bővítés, biztosítéktábla szerelés, okosotthon előkészítés, FI-relé beépítés. Minden munkáról érintésvédelmi jegyzőkönyvet állítunk ki.",
+                details: [
+                    "Érintésvédelmi jegyzőkönyv",
+                    "Réz vezetékrendszer (MMCU/MKH)",
+                    "Szerelvényezés (Schneider, Legrand)",
+                    "LED világítás tervezés"
+                ],
+                price: "18.000 - 26.000 Ft / kiállás",
+                example: "Teljes hálózatcsere egy átlagos lakásban: 850.000 Ft-tól"
+            },
+            { 
+                icon: "droplets", 
+                title: "Víz & Fűtés", 
+                desc: "Energiatakarékos gépészeti megoldások.", 
+                tech: "Víz- és lefolyóhálózat csere, padlófűtés tekerés, hőszivattyú telepítés, kondenzációs kazán bekötés, szaniterezés. Kizárólag prémium, presselt idomokkal dolgozunk.",
+                details: [
+                    "Ötrétegű presselt csőrendszerek",
+                    "Nyomáspróba dokumentálva",
+                    "Geberit fali WC rendszerek",
+                    "Radiátoros körök beszabályozása"
+                ],
+                price: "Egyedi mérnöki kalkuláció",
+                example: "Fürdőszoba gépészeti komplettírozása: 450.000 Ft-tól"
+            },
+            { 
+                icon: "paintbrush", 
+                title: "Festés & Glettelés", 
+                desc: "Tökéletes felületek, tartós bevonatok.", 
+                tech: "Hálózás, többrétegű glettelés porszívós csiszolással, élvédőzés, prémium festékek (Dulux, Héra Premium, Tikkurila). Q4 minőségű felületek, repedésmentes garanciával.",
+                details: [
+                    "Üvegfátyol hálózás repedés ellen",
+                    "Gépi glettelés nagy felületen",
+                    "Súrolható, mosható felületek",
+                    "Díszítőfestés és tapétázás"
+                ],
+                price: "3.500 - 6.000 Ft / m2",
+                example: "Glettelés + 2 réteg festés: kb. 4.500 Ft / m2"
+            }
+        ];
+
+        // FAQ Adatok
+        const faqs = [
+            { q: "Valóban rendelkeznek biztosítással?", a: "Igen, a Rebuild Home 2000 generálkivitelezői felelősségbiztosítása 50 millió forintos keretösszegig fedezi az esetlegesen okozott károkat. Ez a biztosítás minden szerződött munkánkra automatikusan kiterjed, az igazolást az ajánlathoz csatoljuk." },
+            { q: "Milyen hosszú a garanciaidő?", a: "Minden elvégzett munkánkra 2 év teljes körű jótállást vállalunk. Mérnöki kivitelezés lévén a felhasznált anyagok és a technológia megfelelősége garantált." },
+            { q: "Hogyan történik az elszámolás?", a: "Szakaszosan, a készültségi foknak megfelelően számolunk el. Ön csak azért fizet, ami már elvégezve és átvéve lett." },
+            { q: "Saját szakemberekkel dolgoznak?", a: "Igen, állandó, összeszokott csapattal dolgozunk, akiket mérnöki felügyelet alatt tartok. Nem alkalmazunk ellenőrizetlen alvállalkozói láncokat." }
+        ];
+
+        // Projects
+        const projects = [
+            {
+                title: "V. kerületi Polgári Luxus",
+                before: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=1200",
+                after: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80&w=1200",
+                specs: "125 m2 • Hőszivattyú • 4.5 hónap",
+                desc: "Teljes körű rekonstrukció egy 100 éves bérházban.",
+                problem: "Omladozó vakolat, 60 éves gépészet.",
+                solution: "Acélgerendás kiváltás, falvarrás technológia."
+            }
+        ];
+
+        // Render Functions
+        const grid = document.getElementById('services-grid');
+        const detailsContainer = document.getElementById('service-details-container');
+
+        services.forEach((s, i) => {
+            const card = document.createElement('div');
+            card.className = "service-card p-6 rounded-3xl shadow-sm transition-all border flex flex-col items-center text-center gap-4 cursor-pointer group bg-white border-slate-100 hover:border-amber-500";
+            card.onclick = () => selectService(i);
+            card.innerHTML = `
+                <div class="w-16 h-16 rounded-2xl flex items-center justify-center transition-colors bg-amber-100 text-amber-600 group-hover:bg-amber-500 group-hover:text-white mb-2">
+                    <i data-lucide="${s.icon}" class="w-8 h-8"></i>
+                </div>
+                <div>
+                    <h4 class="text-sm font-black uppercase mb-1 tracking-tight">${s.title}</h4>
+                    <p class="text-[10px] font-black text-amber-600 uppercase mb-3">${s.price}</p>
+                    <p class="text-xs leading-snug text-slate-500">${s.desc}</p>
+                </div>
+            `;
+            grid.appendChild(card);
+
+            const detail = document.createElement('div');
+            detail.id = `detail-${i}`;
+            detail.className = "service-detail bg-white rounded-[3rem] p-8 md:p-12 border-2 border-amber-500 shadow-2xl mt-8";
+            detail.innerHTML = `
+                <div class="grid lg:grid-cols-3 gap-12">
+                    <div class="lg:col-span-2">
+                        <div class="flex items-center gap-4 mb-8">
+                            <div class="bg-amber-500 text-slate-900 p-4 rounded-2xl"><i data-lucide="${s.icon}"></i></div>
+                            <div>
+                                <h4 class="text-3xl font-black uppercase tracking-tighter">${s.title} Részletek</h4>
+                                <p class="text-amber-600 font-bold uppercase text-xs tracking-widest">Műszaki specifikáció</p>
+                            </div>
+                        </div>
+                        <p class="text-slate-600 text-lg mb-8 leading-relaxed font-medium">${s.tech}</p>
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            ${s.details.map(d => `<div class="flex items-center gap-3 bg-slate-50 p-4 rounded-xl border border-slate-100"><i data-lucide="check-circle" class="text-green-500 w-5"></i><span class="text-xs font-bold text-slate-700 uppercase tracking-tight">${d}</span></div>`).join('')}
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="bg-slate-900 text-white p-8 rounded-3xl border border-white/5 shadow-xl">
+                            <p class="text-[10px] font-black text-amber-500 uppercase tracking-[0.3em] mb-4">Irányár</p>
+                            <p class="text-3xl font-black mb-2">${s.price}</p>
+                            <p class="text-[10px] text-slate-400 font-bold leading-relaxed mb-6 uppercase tracking-widest">A végleges ár a felmérés után dől el.</p>
+                            <div class="pt-6 border-t border-white/10">
+                                <p class="text-[10px] font-black uppercase mb-2 text-slate-400">Példa kalkuláció:</p>
+                                <p class="text-xs font-medium text-slate-200">${s.example}</p>
+                            </div>
+                        </div>
+                        <a href="#kapcsolat" class="block w-full text-center bg-amber-500 text-slate-900 font-black py-4 rounded-2xl uppercase tracking-widest text-xs hover:bg-slate-800 hover:text-white transition-all">Személyre szabott ajánlat</a>
+                    </div>
+                </div>
+            `;
+            detailsContainer.appendChild(detail);
+        });
+
+        let currentActive = null;
+        function selectService(index) {
+            const cards = document.querySelectorAll('.service-card');
+            const details = document.querySelectorAll('.service-detail');
+            
+            if (currentActive === index) {
+                details[index].classList.remove('active-service');
+                cards[index].classList.remove('bg-slate-900', 'border-slate-900', 'text-white', 'shadow-xl', 'scale-[1.05]');
+                currentActive = null;
+                return;
+            }
+
+            details.forEach(d => d.classList.remove('active-service'));
+            cards.forEach(c => c.classList.remove('bg-slate-900', 'border-slate-900', 'text-white', 'shadow-xl', 'scale-[1.05]'));
+
+            details[index].classList.add('active-service');
+            cards[index].classList.add('bg-slate-900', 'border-slate-900', 'text-white', 'shadow-xl', 'scale-[1.05]');
+            currentActive = index;
+            lucide.createIcons();
+            
+            if(window.innerWidth < 768) {
+                details[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        const projContainer = document.getElementById('projects-container');
+        projects.forEach((p, idx) => {
+            const projEl = document.createElement('div');
+            projEl.innerHTML = `
+                <div class="bg-slate-50 rounded-[3rem] overflow-hidden border border-slate-100 shadow-xl flex flex-col lg:flex-row">
+                    <div class="relative h-[400px] lg:h-[600px] lg:w-2/3 overflow-hidden">
+                        <img src="${p.after}" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 overflow-hidden" id="slider-${idx}" style="width: 50%; border-right: 4px solid #F59E0B">
+                            <img src="${p.before}" class="w-full h-full object-cover max-w-none slider-before-img">
+                        </div>
+                        <input type="range" min="0" max="100" value="50" oninput="updateSlider(this, ${idx})" class="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-40">
+                        <div class="absolute top-1/2 -translate-y-1/2 pointer-events-none z-30" id="handle-${idx}" style="left: 50%; transform: translateX(-50%)">
+                            <div class="w-12 h-12 bg-amber-500 rounded-full flex items-center justify-center shadow-2xl border-4 border-white text-white">
+                                <i data-lucide="move-horizontal"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-12 lg:w-1/3 bg-white flex flex-col justify-center">
+                        <h4 class="text-3xl font-black uppercase mb-6 tracking-tighter">${p.title}</h4>
+                        <div class="space-y-6">
+                            <div class="flex gap-4"><div class="text-red-500"><i data-lucide="x-circle"></i></div><div><p class="text-[10px] font-black uppercase text-slate-400">Hiba</p><p class="text-xs font-bold">${p.problem}</p></div></div>
+                            <div class="flex gap-4"><div class="text-green-500"><i data-lucide="check-circle"></i></div><div><p class="text-[10px] font-black uppercase text-slate-400">Megoldás</p><p class="text-xs font-bold">${p.solution}</p></div></div>
+                            <div class="pt-6 border-t border-slate-100"><p class="text-sm font-black text-slate-900">${p.specs}</p></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            projContainer.appendChild(projEl);
+            const img = projEl.querySelector('.slider-before-img');
+            img.style.width = projEl.querySelector('img').offsetWidth + 'px';
+        });
+
+        function updateSlider(input, idx) {
+            document.getElementById(`slider-${idx}`).style.width = input.value + '%';
+            document.getElementById(`handle-${idx}`).style.left = input.value + '%';
+        }
+
+        const faqC = document.getElementById('faq-container');
+        faqs.forEach(f => {
+            const d = document.createElement('div');
+            d.className = "faq-item bg-white border border-slate-100 rounded-2xl p-6 cursor-pointer";
+            d.onclick = () => d.classList.toggle('active');
+            d.innerHTML = `<div class="flex justify-between items-center font-black text-sm uppercase tracking-tight"><span>${f.q}</span><i data-lucide="chevron-down" class="faq-icon text-amber-500"></i></div><div class="faq-answer text-slate-500 text-sm mt-2">${f.a}</div>`;
+            faqC.appendChild(d);
+        });
+
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            const prog = document.getElementById('progress-bar');
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            prog.style.width = (winScroll / height) * 100 + "%";
+
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-white/95', 'backdrop-blur-md', 'shadow-md', 'py-2');
+                nav.classList.remove('bg-transparent', 'py-4');
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.replace('text-white', 'text-slate-900'));
+                document.getElementById('logo-text').classList.replace('text-white', 'text-slate-900');
+                document.querySelector('.logo-path-main').setAttribute('stroke', '#0F172A');
+            } else {
+                nav.classList.add('bg-transparent', 'py-4');
+                nav.classList.remove('bg-white/95', 'backdrop-blur-md', 'shadow-md', 'py-2');
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.replace('text-slate-900', 'text-white'));
+                document.getElementById('logo-text').classList.replace('text-slate-900', 'text-white');
+                document.querySelector('.logo-path-main').setAttribute('stroke', 'white');
+            }
+        });
+
+        function toggleMenu() {
+            document.getElementById('mobile-menu').classList.toggle('translate-x-full');
+        }
+
+        document.getElementById('year').textContent = new Date().getFullYear();
+        lucide.createIcons();
     </script>
 </body>
 </html>
